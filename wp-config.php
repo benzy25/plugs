@@ -87,3 +87,7 @@ if ( !defined('ABSPATH') )
 
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
+
+// debugging error log display in browser
+define('WP_DEBUG', true);
+define('WP_DEBUG_DISPLAY', true);
