@@ -9,12 +9,12 @@
  * License: GPL2
  */
 
+// registers all our custom shorcodes on init
+add_action('init', 'benz_register_shortcodes');
+
 function benz_register_shortcodes() {
     add_shortcode('benz_form', 'benz_form_shortcode');
 }
-
-// registers all our custom shorcodes on init
-add_action('init', 'benz_form_shortcode');
 
 function benz_form_shortcode( $args, $content="") {
     // Setup output var - form html
