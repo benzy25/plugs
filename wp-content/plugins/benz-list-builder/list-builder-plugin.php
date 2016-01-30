@@ -1,8 +1,8 @@
 <?php
 /*
- * Plugin Name: Benz Code College Udemy Course 
+ * Plugin Name: Benz List Builder 
  * Plugin URI: http://www.robbenz.com
- * Description: Maybe I will like this course better  
+ * Description: List Builder plugin built with Code College Usemy online course
  * Version: 1.0
  * Author: RobBenz
  * Author URI: http://www.robbenz.com 
