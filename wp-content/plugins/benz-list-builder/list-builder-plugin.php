@@ -13,17 +13,22 @@
 
 /*
 	
-	1. HOOKS
+    1. HOOKS
 		1.1 - registers all our custom shortcodes
-        1.2 - register custom admin column headers
-        1.3 - register custom admin column data
+		1.2 - register custom admin column headers
+		1.3 - register custom admin column data
 	
 	2. SHORTCODES
 		2.1 - benz_register_shortcodes()
 		2.2 - benz_form_shortcode()
 		
 	3. FILTERS
-        3.1 - creating custom column header data
+		3.1 - benz_subscriber_column_headers()
+		3.2 - benz_subscriber_column_data()
+		3.2.2 - benz_register_custom_admin_titles()
+		3.2.3 - benz_custom_admin_titles()
+		3.3 - benz_list_column_headers()
+		3.4 - benz_list_column_data()
 		
 	4. EXTERNAL SCRIPTS
 		
