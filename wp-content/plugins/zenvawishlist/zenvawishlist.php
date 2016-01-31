@@ -1,48 +1,58 @@
 <?php
 /*
- * Plugin Name: Benz Wishlist 
- * Plugin URI: http://www.plugs.robbenz.com
- * Description: My Wishlist plugin 
- * Version: 1.0
- * Author: RobBenz
- * Author URI: http://www.plugs.robbenz.com 
- * License: GPL2
+Plugin Name: Zenva Wishlist plugin
+Plugin URI: http://www.zenva.com
+Description: Add a wish list widget where registered users can save the posts of the products they want to buy. 
+Version: 1.0
+Author: Zenva
+Author URI: http://www.zenva.com
+License: GPL2
+*/
+
+/**
+ * Steps
+ * 1-widget skelleton, form and update same as youtube widget
+ * 2-on widget show check if user is logged in
+ * 3-show ajax "add to wishlist", save to user metadata
+ * 4-query to see if user already likes it to show they already added the item
+ * 5-show dashboard widget to user
+ * 6-admin settings: set number of items to show
+ * 
  */
 
-
 //register widget
-add_action( 'widgets_init', 'benz_widget_init' );
+add_action( 'widgets_init', 'zvawp_widget_init' );
 
 //load external files
-add_action( 'wp', 'benz_init' );
+add_action( 'wp', 'zvawp_init' );
 
 //add to wishlist Ajax if logged in. Learn more: http://www.garyc40.com/2010/03/5-tips-for-using-ajax-in-wordpress
-add_action( 'wp_ajax_benz_add_wishlist', 'benz_add_wishlist_process' );
+add_action( 'wp_ajax_zvawp_add_wishlist', 'zvawp_add_wishlist_process' );
 
 //if not logged in use this:  add_action( 'wp_ajax_nopriv_myajax-submit', 'myajax_submit' );
 
 //add admin settings
-add_action('admin_init', 'benz_admin_init');
-add_action('admin_menu', 'benz_plugin_menu' );
+add_action('admin_init', 'zvawp_admin_init');
+add_action('admin_menu', 'zvawp_plugin_menu' );
 
 //dashboard widget
-add_action('wp_dashboard_setup','benz_create_dashboard_widget');
+add_action('wp_dashboard_setup','zvawp_create_dashboard_widget');
 
 /**
  * load external files
  */
-function benz_init() {
+function zvawp_init() {
     //register plugin js file. Jquery is a requirement for this script so we specify it
-    wp_register_script( 'benzwishlist-js', plugins_url( '/benzwishlist.js', __FILE__ ), array('jquery') );
+    wp_register_script( 'zenvawishlist-js', plugins_url( '/zenvawishlist.js', __FILE__ ), array('jquery') );
     
     //load scripts
     wp_enqueue_script('jquery');
-    wp_enqueue_script('benzwishlist-js');
+    wp_enqueue_script('zenvawishlist-js');
     
     global $post;
-    wp_localize_script( 'benzwishlist-js', 'MyAjax', array(
+    wp_localize_script( 'zenvawishlist-js', 'MyAjax', array(
         'postId' => $post->ID,
-        'action' => 'benz_add_wishlist'
+        'action' => 'zvawp_add_wishlist'
     ) );
 }
 
@@ -50,22 +60,22 @@ function benz_init() {
 /**
  * initiate widget
  */
-function benz_widget_init() {
-    register_widget(benz_Widget);
+function zvawp_widget_init() {
+    register_widget(Zvawp_Widget);
 }
 
 /**
  * widget class
  */
-class benz_Widget extends WP_Widget {
-    function benz_Widget() {
+class Zvawp_Widget extends WP_Widget {
+    function Zvawp_Widget() {
         $widget_options = array(
-            'classname' => 'benz_class', //for CSS
+            'classname' => 'zvawp_class', //for CSS
             'description' => 'Add items to wishlist'
         );
         
         //id for DOM element
-        $this->WP_Widget('benz_id', 'Wishlist', $widget_options);
+        $this->WP_Widget('zvawp_id', 'Wishlist', $widget_options);
     }
     
     /**
@@ -106,11 +116,11 @@ class benz_Widget extends WP_Widget {
             }
             else {
                 global $post;
-                if(benz_has_wishlisted($post->ID)) {
+                if(zvawp_has_wishlisted($post->ID)) {
                    echo 'You want this!'; 
                 }
                 else {
-                    echo '<span id="benz_add_wishlist_div"><a id="benz_add_wishlist" href="">Add to wishlist</a></span>';
+                    echo '<span id="zvawp_add_wishlist_div"><a id="zvawp_add_wishlist" href="">Add to wishlist</a></span>';
                 }                
             }
             
@@ -122,14 +132,14 @@ class benz_Widget extends WP_Widget {
 /** 
  * process add to wishlist ajax
  */
-function benz_add_wishlist_process() {
+function zvawp_add_wishlist_process() {
 
     $post_id = (int)$_POST['postId'];
     
     $user = wp_get_current_user();
     
     //save user metadata if not saved already
-    if(!benz_has_wishlisted($post_id)) {
+    if(!zvawp_has_wishlisted($post_id)) {
         add_user_meta($user->ID, 'wanted_posts', $post_id); 
     }    
     
@@ -145,7 +155,7 @@ function benz_add_wishlist_process() {
 /**
  * check that the current user has wishlisted a post
  */
-function benz_has_wishlisted($post_id) {
+function zvawp_has_wishlisted($post_id) {
     
     $user = wp_get_current_user();    
     $values = get_user_meta($user->ID, 'wanted_posts');
@@ -162,41 +172,41 @@ function benz_has_wishlisted($post_id) {
 /**
  * Add plugin admin settings
  */
-function benz_admin_init() {
-    register_setting('benz-group', 'benz_dashboard_title');
-    register_setting('benz-group', 'benz_number_of_items');
+function zvawp_admin_init() {
+    register_setting('zvawp-group', 'zvawp_dashboard_title');
+    register_setting('zvawp-group', 'zvawp_number_of_items');
 }
 
 /**
  * add menu to admin
  */
-function benz_plugin_menu() {
-    add_options_page( 'benz Wishlist Options', 'benz Wishlist', 'manage_options', 'benz', 'benz_plugin_options' );
+function zvawp_plugin_menu() {
+    add_options_page( 'Zenva Wishlist Options', 'Zenva Wishlist', 'manage_options', 'zvawp', 'zvawp_plugin_options' );
 }
 
 /**
  * show admin settings page
  */
-function benz_plugin_options() {
+function zvawp_plugin_options() {
     ?>
     <div class="wrap">
         <?php screen_icon(); ?>
-        <h2>benz Wishlist</h2>
+        <h2>Zenva Wishlist</h2>
         <form action="options.php" method="post">
-            <?php settings_fields('benz-group'); ?>
-            <?php @do_settings_fields('benz-group'); ?> 
+            <?php settings_fields('zvawp-group'); ?>
+            <?php @do_settings_fields('zvawp-group'); ?> 
             <table class="form-table"> 
                 <tr valign="top"> 
-                    <th scope="row"><label for="benz_dashboard_title">Dashboard widget title</label></th> 
+                    <th scope="row"><label for="zvawp_dashboard_title">Dashboard widget title</label></th> 
                     <td>
-                        <input type="text" name="benz_dashboard_title" id="dashboard_title" value="<?php echo get_option('benz_dashboard_title'); ?>" />
+                        <input type="text" name="zvawp_dashboard_title" id="dashboard_title" value="<?php echo get_option('zvawp_dashboard_title'); ?>" />
                         <br/><small>help text for this field</small>
                     </td>                
                 </tr> 
                 <tr valign="top"> 
-                    <th scope="row"><label for="benz_number_of_items">Number of items to show</label></th> 
+                    <th scope="row"><label for="zvawp_number_of_items">Number of items to show</label></th> 
                     <td>
-                        <input type="text" name="benz_number_of_items" id="dashboard_title" value="<?php echo get_option('benz_number_of_items'); ?>" />
+                        <input type="text" name="zvawp_number_of_items" id="dashboard_title" value="<?php echo get_option('zvawp_number_of_items'); ?>" />
                         <br/><small>help text for this field</small>
                     </td>                
                 </tr> 
@@ -209,21 +219,21 @@ function benz_plugin_options() {
 /**
  * create dashboard widget
  */
-function benz_create_dashboard_widget() {
+function zvawp_create_dashboard_widget() {
     //create dashboard widget
-    $title = get_option('benz_dashboard_title') ? get_option('benz_dashboard_title') : 'Wishlist';
-    wp_add_dashboard_widget('css_id',  $title, 'benz_show_dashboard_widget');
+    $title = get_option('zvawp_dashboard_title') ? get_option('zvawp_dashboard_title') : 'Wishlist';
+    wp_add_dashboard_widget('css_id',  $title, 'zvawp_show_dashboard_widget');
 }
 
 /**
  * show dashboard widget with the items the user wants
  */
-function benz_show_dashboard_widget() {
+function zvawp_show_dashboard_widget() {
     //get wanted items
     $user = wp_get_current_user();    
     $values = get_user_meta($user->ID, 'wanted_posts');
     
-    $limit = (int)get_option('benz_number_of_items') ? (int)get_option('benz_number_of_items') : 10;
+    $limit = (int)get_option('zvawp_number_of_items') ? (int)get_option('zvawp_number_of_items') : 10;
     
     echo '<ul>';
     foreach($values as $i => $value) {
