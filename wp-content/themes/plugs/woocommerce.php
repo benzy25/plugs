@@ -1,38 +1,26 @@
 <?php
 /**
- * The template is specifically for WooCommerce.
+ * The template for displaying all pages.
  *
- * This is the template that is used by WooCommerce.
+ * This is the template that displays all pages by default.
+ * Please note that this is the WordPress construct of pages
+ * and that other 'pages' on your WordPress site will use a
+ * different template.
  *
- * @package GeneratePress
+ * @package _s
  */
 
 get_header(); ?>
 
-	<div id="primary" <?php generate_content_class();?>>
-		<main id="main" <?php generate_main_class(); ?>>
-			<?php do_action('generate_before_main_content'); ?>
-			<article id="post-<?php the_ID(); ?>" <?php post_class(); ?> <?php generate_article_schema( 'CreativeWork' ); ?>>
-				<div class="inside-article">
-					<?php do_action( 'generate_before_content'); ?>
-					<div class="entry-content" itemprop="text">
-						<?php 
-                        if ( is_singular( 'product' ) ) {
-                            woocommerce_content();
-                            } else {
-                            //For ANY product archive.
-                            //Product taxonomy, product search or /shop landing
-                            woocommerce_get_template( 'archive-product.php' );
-                        }
-                        ?>
-					</div><!-- .entry-content -->
-					<?php do_action( 'generate_after_content'); ?>
-				</div><!-- .inside-article -->
-			</article><!-- #post-## -->
-			<?php do_action('generate_after_main_content'); ?>
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+			<?php while ( have_posts() ) : the_post(); ?>
+            <?php woocommerce_content(); ?>
+			<?php endwhile; // end of the loop. ?>
+
 		</main><!-- #main -->
 	</div><!-- #primary -->
 
-<?php 
-do_action('generate_sidebars');
-get_footer();
+<?php get_sidebar(); ?>
+<?php get_footer(); ?>
