@@ -1,26 +1,22 @@
-<?php
-/**
- * The template for displaying all pages.
- *
- * This is the template that displays all pages by default.
- * Please note that this is the WordPress construct of pages
- * and that other 'pages' on your WordPress site will use a
- * different template.
- *
- * @package _s
- */
+<?php get_template_part('includes/header'); ?>
 
-get_header(); ?>
+<div class="container">
+  <div class="row">
 
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
-
-			<?php while ( have_posts() ) : the_post(); ?>
+    <div class="col-xs-12 col-sm-8">
+      <div id="content" role="main">
+        <?php tha_content_before(); ?>
+        <div class="woocommerce">
             <?php woocommerce_content(); ?>
-			<?php endwhile; // end of the loop. ?>
+        </div>
+      </div><!-- /#content -->      
+    </div>
 
-		</main><!-- #main -->
-	</div><!-- #primary -->
+    <div class="col-xs-6 col-sm-4" id="sidebar" role="navigation">
+      <?php get_template_part('includes/sidebar'); ?>
+    </div>
 
-<?php get_sidebar(); ?>
-<?php get_footer(); ?>
+  </div><!-- /.row -->
+</div><!-- /.container -->
+
+<?php get_template_part('includes/footer'); ?>
