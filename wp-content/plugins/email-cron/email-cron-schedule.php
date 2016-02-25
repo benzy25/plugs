@@ -27,8 +27,8 @@ function benzcron_init_cronjob() {
 function benzcron_sendmail() {
     //send email code here
     //get blog admin  http://codex.wordpress.org/Function_Reference/get_bloginfo
-    $zva_admin_email = get_bloginfo('admin_email');
+    $benz_admin_email = get_bloginfo('admin_email');
     
-    wp_mail($zva_admin_email, 'admin', 'Time for your medication!');
+    wp_mail($benz_admin_email, 'admin', 'Time for your medication!');
 }
 ?>
