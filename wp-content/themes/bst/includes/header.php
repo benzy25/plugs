@@ -18,8 +18,7 @@
 <header id="masthead" role="banner">
 <div class="container">
 	<div id="dia-logo-left">
-	<a href="<?php echo site_url(); ?>"><img src="<?php echo site_url(); ?>/wp-content/imgs/DiaMedical-Logo-main.png" /></a>
-	</div>
+	<a href="<?php echo site_url(); ?>"><img src="<?php echo site_url(); ?>/wp-content/imgs/DiaMedical-Logo-main.png" /></a> </div>
 	<?php get_template_part('includes/navbar-search'); ?>
 	<?php
 			wp_nav_menu( array(
