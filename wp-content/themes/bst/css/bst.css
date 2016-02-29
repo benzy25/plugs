@@ -1,0 +1,90 @@
+/* Max content widths */
+.size-auto, .size-full, .size-large, .size-medium, .size-thumbnail { max-width: 100%; height: auto }
+/* END */
+
+/* Main content */
+#content article { margin-bottom: 40px }
+#content header { margin: 20px 0 }
+#content section { margin-bottom: 20px }
+#content footer { padding-bottom: 20px }
+/* END */
+
+/* Sidebar */
+.sidebar { margin-top: 20px }
+.sidebar section { margin-bottom: 40px }
+.sidebar ul, .sidebar ol { list-style-type: none; padding: 0 }
+.sidebar li { margin: 10px 0 }
+/* END */
+
+/* Hide form placeholders on focus */
+input:focus::-webkit-input-placeholder { color: transparent; }
+input:focus:-moz-placeholder { color: transparent; } /* FF 4-18 */
+input:focus::-moz-placeholder { color: transparent; } /* FF 19+ */
+textarea:focus::-webkit-input-placeholder { color: transparent; }
+textarea:focus:-moz-placeholder { color: transparent; } /* FF 4-18 */
+textarea:focus::-moz-placeholder { color: transparent; } /* FF 19+ */
+/* END */
+
+/*	[class*="col-"] { background-clip: padding-box; border: 7px solid transparent; }   */
+
+/*header*/
+#dia-logo-left { float: left; height: 80px; margin: 0; width: 356px; }
+#dia-logo-left img { width: 100%; }
+#masthead { width: 100%; padding: 2em 0em 0em 0em; height:117px;}
+/* END */
+
+/*fish menu*/
+.sf-menu .menu-item-has-children > a:first-child::after, .sf-menu .page_item_has_children > a:first-child::after { border: none !important; }
+.navbar-header{ padding: 0.75em 0;}
+.benz-menu{ float:left; margin: 0 1.4em;}
+.navbar-static-top{ background: #00426a; }
+.sf-menu .menu-item-has-children > a:first-child,
+#menu-home li a,
+.sf-menu .page_item_has_children > a:first-child { color: #fff; font-size: 19px; text-align: center; text-transform: uppercase; }
+/* END */
+
+/* Product Slider */
+.wpb_area_title { display:none !important;}
+.wpb_slider_area{ clear:both; margin-top:10px;}
+.grid figcaption h3 { font-weight:500; font-size:1.2em;}
+/*footer*/
+#footerwrap { width: 1030px; height: 300px; font-family: 'Open Sans', sans-serif; }
+#footer2014 { background: #00426a; clear: both; }
+#footerlogos { width: 980px; height: 100px; }
+#diamedicallogo { height: 100px; width: 300px; float: left; margin: 20px 0px 0px 40px; }
+#medmatlogo { height: 100px; width: 300px; float: left; margin: 28px 0px 0px 30px; }
+#simlablogo { height: 100px; width: 300px; float: left; margin: 26px 0px 0px 10px; }
+#footerconnect { height: 172px; width: 390px; float: left; padding: 20px 25px 20px 25px; margin: -39px 0 0 27px; }
+.connecttop { font-size: 16px; color: #fff; line-height: 24px; }
+.connectbottom { font-size: 13px; color: #fff; line-height: 24px; }
+.socialicons2014 { line-height: 0px; }
+#footerlinks1 { color: #a6d179; float: left; font-size: 14px; line-height: 23px; margin: 0 0 0 24px; width: 140px; font-weight: 800; }
+#footerlinks1 a { color: #a6d179; float: left; font-size: 14px; line-height: 23px; text-decoration: none; font-weight: 600; }
+#footerlinks1 a:visited { color: #a6d179; float: left; font-size: 15px; line-height: 23px; text-decoration: none; }
+#footerlinks1 a:hover { color: #fff; text-decoration: none; }
+#footerlinks2 { float: left; font-size: 15px; line-height: 20px; margin: 0 0 0 44px; width: 130px; }
+#footerlinks2 a { color: #fff; float: left; font-size: 13px; line-height: 20px; text-decoration: none; }
+#footerlinks2 a:visited { color: #fff; float: left; font-size: 13px; line-height: 20px; text-decoration: none; }
+#footerlinks2 a:hover { color: #a6d179; text-decoration: none; }
+.popularproducts { font-weight: 600; padding: 0px; color: #a6d179; text-decoration: none; font-size: 14px; margin-bottom: -19px; margin-top: 2px; }
+#footerlinks3 { float: left; font-size: 15px; line-height: 20px; margin: 0 0 0 33px; width: 170px; }
+#footerlinks3 a { color: #fff; float: left; font-size: 13px; line-height: 20px; text-decoration: none; }
+#footerlinks3 a:visited { color: #fff; float: left; font-size: 13px; line-height: 20px; text-decoration: none; }
+#footerlinks3 a:hover { color: #a6d179; text-decoration: none; }
+/* END */
+
+/* Comments */
+#respond { margin-top: 40px }
+ol.commentlist { counter-reset: li; /* Initiate a counter */ padding: 0 }
+ol.commentlist ul { padding: 0 }
+ol.commentlist > li { position: relative; margin: 0 0 20px 0; list-style: none /* Disable the normal item numbering */ }
+ol.commentlist > li:before { content: "Thread " counter(li); /* Use the counter as content */ counter-increment: li; /* Increment the counter by 1 */ position:absolute; top: 0; right: 0; border-bottom: 1px solid #ddd; border-left: 1px solid #ddd; border-bottom-left-radius: 4px; padding: 5px 20px 5px 10px; color: #999 }
+ol.commentlist li ol, ol.commentlist li ul { list-style-type: none; margin: 0 }
+.commentlist li li { background: #f8f8f8; }
+.commentlist li li li { background: #fff }
+.commentlist li li li li { background: #f8f8f8 }
+.commentlist li li li li li li { background: #fff }
+.commentlist li { padding: 20px }
+.commentlist ul li { margin-top: 20px; margin-bottom: 0 }
+.reply p { margin: 0 }
+/* END */
