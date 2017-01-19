@@ -51,7 +51,9 @@ function wc_update_product_stock( $product_id, $new_stock_level ) {
  */
 function wc_update_product_stock_status( $product_id, $status ) {
 	$product = wc_get_product( $product_id );
-	$product->set_stock_status( $status );
+	if ( $product ) {
+		$product->set_stock_status( $status );
+	}
 }
 
 /**
@@ -103,6 +105,11 @@ function wc_delete_product_transients( $post_id = 0 ) {
 	if ( $post_id > 0 ) {
 		foreach( $post_transient_names as $transient ) {
 			$transients_to_clear[] = $transient . $post_id;
+		}
+
+		// Does this product have a parent?
+		if ( $parent_id = wp_get_post_parent_id( $post_id ) ) {
+			wc_delete_product_transients( $parent_id );
 		}
 	}
 
@@ -202,23 +209,22 @@ function wc_get_featured_product_ids() {
 /**
  * Filter to allow product_cat in the permalinks for products.
  *
- * @access public
- * @param string $permalink The existing permalink URL.
- * @param WP_Post $post
+ * @param  string  $permalink The existing permalink URL.
+ * @param  WP_Post $post
  * @return string
  */
 function wc_product_post_type_link( $permalink, $post ) {
-	// Abort if post is not a product
+	// Abort if post is not a product.
 	if ( $post->post_type !== 'product' ) {
 		return $permalink;
 	}
 
-	// Abort early if the placeholder rewrite tag isn't in the generated URL
+	// Abort early if the placeholder rewrite tag isn't in the generated URL.
 	if ( false === strpos( $permalink, '%' ) ) {
 		return $permalink;
 	}
 
-	// Get the custom taxonomy terms in use by this post
+	// Get the custom taxonomy terms in use by this post.
 	$terms = get_the_terms( $post->ID, 'product_cat' );
 
 	if ( ! empty( $terms ) ) {
@@ -228,7 +234,7 @@ function wc_product_post_type_link( $permalink, $post ) {
 		$category_object = get_term( $category_object, 'product_cat' );
 		$product_cat     = $category_object->slug;
 
-		if ( $parent = $category_object->parent ) {
+		if ( $category_object->parent ) {
 			$ancestors = get_ancestors( $category_object->term_id, 'product_cat' );
 			foreach ( $ancestors as $ancestor ) {
 				$ancestor_object = get_term( $ancestor, 'product_cat' );
@@ -385,8 +391,8 @@ function wc_scheduled_sales() {
 
 			// Sync parent
 			if ( $parent ) {
-				// We can force variable product prices to sync up by removing their min price meta
-				delete_post_meta( $parent, '_min_price_variation_id' );
+				// Clear prices transient for variable products.
+				delete_transient( 'wc_var_prices_' . $parent );
 
 				// Grouped products need syncing via a function
 				$this_product = wc_get_product( $product_id );
@@ -588,7 +594,7 @@ function wc_get_product_id_by_sku( $sku ) {
  * @param string $date_to
  */
 function _wc_save_product_price( $product_id, $regular_price, $sale_price = '', $date_from = '', $date_to = '' ) {
-	$product_id  = absint( $product_id );
+	$product_id    = absint( $product_id );
 	$regular_price = wc_format_decimal( $regular_price );
 	$sale_price    = $sale_price === '' ? '' : wc_format_decimal( $sale_price );
 	$date_from     = wc_clean( $date_from );
@@ -602,7 +608,8 @@ function _wc_save_product_price( $product_id, $regular_price, $sale_price = '', 
 	update_post_meta( $product_id, '_sale_price_dates_to', $date_to ? strtotime( $date_to ) : '' );
 
 	if ( $date_to && ! $date_from ) {
-		update_post_meta( $product_id, '_sale_price_dates_from', strtotime( 'NOW', current_time( 'timestamp' ) ) );
+		$date_from = strtotime( 'NOW', current_time( 'timestamp' ) );
+		update_post_meta( $product_id, '_sale_price_dates_from', $date_from );
 	}
 
 	// Update price if on sale
@@ -639,10 +646,12 @@ function wc_get_product_variation_attributes( $variation_id ) {
 
 	// Compare to parent variable product attributes and ensure they match
 	foreach ( $parent_attributes as $attribute_name => $options ) {
-		$attribute                 = 'attribute_' . sanitize_title( $attribute_name );
-		$found_parent_attributes[] = $attribute;
-		if ( ! empty( $options['is_variation'] ) && ! array_key_exists( $attribute, $variation_attributes ) ) {
-			$variation_attributes[ $attribute ] = ''; // Add it - 'any' will be asumed
+		if ( ! empty( $options['is_variation'] ) ) {
+			$attribute                 = 'attribute_' . sanitize_title( $attribute_name );
+			$found_parent_attributes[] = $attribute;
+			if ( ! array_key_exists( $attribute, $variation_attributes ) ) {
+				$variation_attributes[ $attribute ] = ''; // Add it - 'any' will be asumed
+			}
 		}
 	}
 
@@ -693,4 +702,32 @@ function wc_get_product_cat_ids( $product_id ) {
 	}
 
 	return $product_cats;
+}
+
+/**
+ * Gets data about an attachment, such as alt text and captions.
+ * @since 2.6.0
+ * @param object|bool $product
+ * @return array
+ */
+function wc_get_product_attachment_props( $attachment_id, $product = false ) {
+	$props = array(
+		'title'   => '',
+		'caption' => '',
+		'url'     => '',
+		'alt'     => '',
+	);
+	if ( $attachment_id ) {
+		$attachment       = get_post( $attachment_id );
+		$props['title']   = trim( strip_tags( $attachment->post_title ) );
+		$props['caption'] = trim( strip_tags( $attachment->post_excerpt ) );
+		$props['url']     = wp_get_attachment_url( $attachment_id );
+		$props['alt']     = trim( strip_tags( get_post_meta( $attachment_id, '_wp_attachment_image_alt', true ) ) );
+
+		// Alt text fallbacks
+		$props['alt']     = empty( $props['alt'] ) ? $props['caption'] : $props['alt'];
+		$props['alt']     = empty( $props['alt'] ) ? trim( strip_tags( $attachment->post_title ) ) : $props['alt'];
+		$props['alt']     = empty( $props['alt'] ) && $product ? trim( strip_tags( get_the_title( $product->ID ) ) ) : $props['alt'];
+	}
+	return $props;
 }

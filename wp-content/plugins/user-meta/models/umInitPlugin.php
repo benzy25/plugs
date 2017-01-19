@@ -1,118 +1,135 @@
 <?php
+namespace UserMeta;
 
-if ( ! class_exists( 'umInitPlugin' ) ) :
-class umInitPlugin {    
-        
-    function pluginInit() {
+class umInitPlugin
+{
+
+    function pluginInit()
+    {
         global $userMeta;
-        
-        $userMeta->checkPro();       
-        $userMeta->loadDirectory( $userMeta->modelsPath . 'classes/', false, array(
-            'umFormsListTableClass.php'
-        ) );
-        
-        if ( $userMeta->isPro )
-            $userMeta->loadModels( $userMeta->modelsPath . 'pro/' );
+        $userMeta->checkPro();
+        if ($userMeta->isPro)
+            $userMeta->loadModels($userMeta->modelsPath . 'pro/');
+        $userMeta->loadDirectory($userMeta->pluginPath . '/helpers/', false);
+        $this->loadControllers($userMeta->controllersPath);
+        $userMeta->loadDirectory($userMeta->pluginPath . '/dev/', false);
+        $userMeta->proLoaded();
+        $this->wpInitHook();
+    }
 
+    /**
+     * @depreciated since 1.2
+     * Extensions should load by user_meta_loaded action
+     */
+    function wpInitHook()
+    {
+        global $userMeta;
         $this->loadExtension();
-        
-        $userMeta->loadControllers( $userMeta->controllersPath );
-        $userMeta->loadDirectory( $userMeta->pluginPath . '/helper/', false );
-        $userMeta->loadDirectory( $userMeta->pluginPath . '/addons/' );
-        
-        $userMeta->loadDirectory( $userMeta->pluginPath . '/dev/', false );
-        
-        if ( ! empty( $userMeta->extensions ) ) {
-            foreach ( $userMeta->extensions as $extName => $extPath ) {
-                $userMeta->loadModels( $extPath . '/models/' );
-                $userMeta->loadModels( $extPath . '/models/pro/' );
-                $userMeta->loadControllers( $extPath . '/controllers/' );
-                $userMeta->loadDirectory( $extPath . '/helper/' );
+        if (! empty($userMeta->extensions)) {
+            $config = [
+                'namespace' => ''
+            ];
+            foreach ($userMeta->extensions as $extension) {
+                $userMeta->loadDirectory($extension . '/models/', false, $config);
+                $userMeta->loadDirectory($extension . '/controllers/', true, $config);
+                $userMeta->loadDirectory($extension . '/helpers/', false, $config);
             }
         }
     }
-    
-    function loadExtension() {
+
+    /**
+     * @depreciated since 1.2
+     * Extensions should load by user_meta_loaded action
+     */
+    function loadExtension()
+    {
         global $userMeta;
-        $extensions = apply_filters( 'user_meta_load_extension', array() );
-        $userMeta->extensions = ! empty( $extensions ) ? $extensions : array();
+        if ($userMeta->isPro())
+            $extensions = apply_filters('user_meta_load_extension', []);
+        $userMeta->extensions = ! empty($extensions) ? $extensions : [];
     }
-    
-    function loadControllers( $controllersPath ) {
+
+    function loadControllers($controllersPath)
+    {
         global $userMeta;
-        $controllersOrder = $userMeta->controllersOrder();   
-                                         
-        $classes = array();
-        foreach ( scandir( $controllersPath ) as $file ) {
-            if ( preg_match( "/.php$/i" , $file ) )
-                $classes[ str_replace( ".php", "", $file ) ] = $controllersPath . $file;            
-        }          
+        $controllersOrder = $userMeta->controllersOrder();
         
-        $proClasses = $userMeta->loadProControllers( $classes, $controllersPath );
-        if ( is_array($proClasses) )
+        $classes = $instance = [];
+        foreach (scandir($controllersPath) as $file) {
+            if (preg_match("/.php$/i", $file))
+                $classes[str_replace(".php", "", $file)] = $controllersPath . $file;
+        }
+        
+        $proClasses = $userMeta->loadProControllers($classes, $controllersPath);
+        if (is_array($proClasses))
             $classes = $proClasses;
-                
-        foreach ( $classes as $className => $classPath ) {
-            require_once( $classPath );
-            if ( ! in_array( $className, $controllersOrder ) )
+        
+        foreach ($classes as $className => $classPath) {
+            require_once ($classPath);
+            if (! in_array($className, $controllersOrder))
                 $controllersOrder[] = $className;
         }
-                          
-        foreach ( $controllersOrder as $className ) {
-            if ( class_exists( $className ) )
-                $instance[] = new $className;
+        
+        foreach ($controllersOrder as $className) {
+            $classWithNamespace = '\\' . __NAMESPACE__ . '\\' . $className;
+            if (class_exists($classWithNamespace))
+                $instance[] = new $classWithNamespace();
         }
-              
-        return $instance;        
-    }     
+        
+        return $instance;
+    }
 
-    function renderPro( $viewName, $parameter = array(), $subdir=null, $ob = false ) {
-        global $userMeta;        
-                
-        $viewPath = self::locateView( $viewName, $subdir );
-        if ( ! $viewPath ) return;
+    function renderPro($viewName, $parameter = array(), $subdir = null, $ob = false)
+    {
+        global $userMeta;
         
-        if ( $parameter ) extract($parameter);    
+        $viewPath = self::locateView($viewName, $subdir);
+        if (! $viewPath)
+            return;
         
-        if ( $ob ) ob_start();
+        if ($parameter)
+            extract($parameter);
+        
+        if ($ob)
+            ob_start();
         
         $pageReturn = include $viewPath;
         
-        if ( $ob ) {
+        if ($ob) {
             $html = ob_get_contents();
             ob_end_clean();
             return $html;
         }
-         
-        if ( $pageReturn AND $pageReturn <> 1 )
+        
+        if ($pageReturn and $pageReturn != 1)
             return $pageReturn;
         
-        if ( isset($html ) ) return $html;        
-    }   
-    
-    function locateView( $viewName, $subdir=null ) {
+        if (isset($html))
+            return $html;
+    }
+
+    function locateView($viewName, $subdir = null)
+    {
         global $userMeta;
         
-        $locations  = array();
-        if ( $subdir )
+        $locations = array();
+        if ($subdir)
             $subdir = $subdir . '/';
         
-        $proLocations = $userMeta->locateProView( $locations );
-        if ( is_array( $proLocations ) )
+        $proLocations = $userMeta->locateProView($locations);
+        if (is_array($proLocations))
             $locations = $proLocations;
         
-        foreach ( $userMeta->extensions as $extName => $extPath )
-            $locations[] = $extPath . '/views/';
+        foreach ($userMeta->extensions as $extension)
+            $locations[] = $extension . '/views/';
         $locations[] = $userMeta->viewsPath;
-
-        foreach ( $locations as $path ) {
+        
+        foreach ($locations as $path) {
             $fullPath = $path . $subdir . $viewName . '.php';
-            if ( file_exists( $fullPath ) )
+            if (file_exists($fullPath))
                 return $fullPath;
         }
         
         return false;
     }
-               
 }
-endif;

@@ -2,65 +2,76 @@
 <?php global $userMeta; ?>
 
 <div class="wrap">
-    <div id="icon-edit-pages" class="icon32 icon32-posts-page"><br /></div>  
-    <h2><?php _e( 'Forms Editor', $userMeta->name );?> <span class="add-new-h2 um_add_button" onclick="umNewForm(this);"><?php _e( 'New Form', $userMeta->name );?></span> </h2>   
+	<div id="icon-edit-pages" class="icon32 icon32-posts-page">
+		<br />
+	</div>
+	<h2><?php _e( 'Forms Editor', $userMeta->name );?> <span
+			class="add-new-h2 um_add_button" onclick="umNewForm(this);"><?php _e( 'New Form', $userMeta->name );?></span>
+	</h2>   
     <?php do_action( 'um_admin_notice' ); ?>
     <div id="dashboard-widgets-wrap">
-        <div class="metabox-holder">
-            <div id="um_admin_content">
-                <form id="um_forms_form" action="" method="post" onsubmit="umUpdateForms(this); return false;" >
+		<div class="metabox-holder">
+			<div id="um_admin_content">
+				<form id="um_forms_form" action="" method="post"
+					onsubmit="umUpdateForms(this); return false;">
                     <?php
-                    echo $userMeta->createInput( 'save_field', 'submit', array( 
-                        'value'=> __( 'Save Changes', $userMeta->name ), 
-                        'class'=> 'pf_save_button  button-primary' 
-                    ) ); ?>
-                    <br /><br />
-                    <div id="um_fields_container">                 
+                    echo $userMeta->createInput('save_field', 'submit', array(
+                        'value' => __('Save Changes', $userMeta->name),
+                        'class' => 'pf_save_button  button-primary'
+                    ));
+                    ?>
+                    <br />
+					<br />
+					<div id="um_fields_container">                 
                         <?php
-                                               
-                        //$userMeta->render( 'form', array( 'fields'=>$fields, 'id'=>1 ) );
+                        
+                        // $userMeta->render( 'form', array( 'fields'=>$fields, 'id'=>1 ) );
                         $i = 0;
-                        if( $forms ){
-                            foreach( $forms as $form ){
-                                $i++;
+                        if ($forms) {
+                            foreach ($forms as $form) {
+                                $i ++;
                                 $form['id'] = $i;
-                                $userMeta->render( "form", array( "id"=>$i, "form"=>$form, "fields"=>$fields ) );
+                                $userMeta->render("form", array(
+                                    "id" => $i,
+                                    "form" => $form,
+                                    "fields" => $fields
+                                ));
                             }
-                        }   
+                        }
                         ?>                                     
                     </div>
-                    <?php 
+                    <?php
                     echo $userMeta->nonceField();
                     
-                    echo $userMeta->createInput( 'save_field', 'submit', array(
-                        'value'=> __( 'Save Changes', $userMeta->name ), 
-                        'class'=>'pf_save_button  button-primary' 
-                    ) );
+                    echo $userMeta->createInput('save_field', 'submit', array(
+                        'value' => __('Save Changes', $userMeta->name),
+                        'class' => 'pf_save_button  button-primary'
+                    ));
                     
                     echo "&nbsp;&nbsp;&nbsp;";
                     
-                    echo $userMeta->createInput( 'new_form', 'button', array( 
-                        'value'     =>__( 'New Form', $userMeta->name ), 
-                        'class'     =>'  button-primary', 
-                        'onclick'   =>'umNewForm(this)' 
-                    ) ); 
+                    echo $userMeta->createInput('new_form', 'button', array(
+                        'value' => __('New Form', $userMeta->name),
+                        'class' => '  button-primary',
+                        'onclick' => 'umNewForm(this)'
+                    ));
                     ?>
                 </form>
-                <input type="hidden" id="form_count" value="<?php echo $i; ?>"/>
-            </div>
-                        
-            
-            <div id="um_admin_sidebar">                            
+				<input type="hidden" id="form_count" value="<?php echo $i; ?>" />
+			</div>
+
+
+			<div id="um_admin_sidebar">                            
                 <?php
-                echo $userMeta->metaBox( __( '3 steps to get started', $userMeta->name ),  $userMeta->boxHowToUse());               
-                if( !@$userMeta->isPro )
-                    echo $userMeta->metaBox( __( 'User Meta Pro', $userMeta->name ),   $userMeta->boxGetPro());
-                echo $userMeta->metaBox( 'Shortcodes',   $userMeta->boxShortcodesDocs());
-                //echo $userMeta->metaBox( __( 'Tips', $userMeta->name ),   $userMeta->boxTips(), false, false);
+                echo $userMeta->metaBox(__('3 steps to get started', $userMeta->name), $userMeta->boxHowToUse());
+                if (! @$userMeta->isPro)
+                    echo $userMeta->metaBox(__('User Meta Pro', $userMeta->name), $userMeta->boxGetPro());
+                echo $userMeta->metaBox('Shortcodes', $userMeta->boxShortcodesDocs());
+                // echo $userMeta->metaBox( __( 'Tips', $userMeta->name ), $userMeta->boxTips(), false, false);
                 ?>
             </div>
-        </div>
-    </div>     
+		</div>
+	</div>
 </div>
 
 <script>
@@ -112,4 +123,4 @@ jQuery('.um_dropme').sortable({
     
     
 });
-</script>   
+</script>

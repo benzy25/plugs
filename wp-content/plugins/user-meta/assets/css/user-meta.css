@@ -42,6 +42,14 @@
     display: inline;
 }
 
+.um_field_container.um_inline label.um_label_inline {
+	margin-right: 10px;
+}
+
+.um_field_container.um_inline span.um_description {
+    margin-left: 10px;
+}
+
 .um_get_button {    
     width: 150px;
     height: 43px;
@@ -65,7 +73,7 @@
 }
 
 .um_input {
-    width: 200px;
+    width: 300px;
 }
 
 input[type='checkbox'].um_input,input[type='radio'].um_input {
@@ -149,7 +157,6 @@ input[type='checkbox'].um_input,input[type='radio'].um_input {
 }
 
 .um_description {
-    /*margin-top: -20px;*/
     font-family: "Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif;
     font-size: 12px;
     color: #666;
@@ -199,6 +206,14 @@ input[type='checkbox'].um_input,input[type='radio'].um_input {
 	-webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 0 rgba(0,0,0,.08);
 	box-shadow: inset 0 1px 0 #fff, 0 1px 0 rgba(0,0,0,.08);
  	vertical-align: top;
+}
+
+.um_remove_file span {
+    background: url('../images/trash.png') no-repeat left center;
+    min-width: 27px;
+    min-height: 30px;
+    padding-left: 25px;
+    cursor: pointer;
 }
 
 /** pf **/
@@ -406,4 +421,9 @@ ul.multiselect-container > li {
 #um_fields_selectors .panel-body .btn-info {
     color: #333;
     background-color: #d9edf7;
+}
+
+.um_selector_options .um_plusminus_rows_holder .um_plusminus_row:hover { 
+    background-color: #f5f5f5;
+    cursor: move;
 }

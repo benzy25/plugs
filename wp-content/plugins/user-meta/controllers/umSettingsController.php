@@ -1,44 +1,47 @@
 <?php
+namespace UserMeta;
 
-if ( ! class_exists( 'umSettingsController' ) ) :
-class umSettingsController {
-    
-    function __construct() {
-        add_action( 'wp_ajax_um_update_settings',   array( $this, 'ajaxUpdateSettings' ) );
+class umSettingsController
+{
+
+    function __construct()
+    {
+        add_action('wp_ajax_um_update_settings', array(
+            $this,
+            'ajaxUpdateSettings'
+        ));
     }
 
-    
-    function ajaxUpdateSettings() {
+    function ajaxUpdateSettings()
+    {
         global $userMeta;
         $userMeta->verifyNonce();
         
-        if( @$_REQUEST['action_type'] == 'authorize_pro' )
-            $userMeta->updateProAccountSettings( $_REQUEST );
+        if (@$_REQUEST['action_type'] == 'authorize_pro')
+            $userMeta->updateProAccountSettings($_REQUEST);
         
-        $settings = $userMeta->arrayRemoveEmptyValue( @$_REQUEST );
-                               
-        $extraFieldCount    = @$settings['backend_profile']['field_count'];
-        $extraFields        = @$settings['backend_profile']['fields'];
+        $settings = $userMeta->arrayRemoveEmptyValue(@$_REQUEST);
         
-        if ( is_array( $extraFields ) ) {
-            foreach ( $extraFields as $key => $val ) {
-                if ( $key >= $extraFieldCount )
-                    unset( $settings['backend_profile']['fields'][ $key ] );
-            }                    
+        $extraFieldCount = @$settings['backend_profile']['field_count'];
+        $extraFields = @$settings['backend_profile']['fields'];
+        
+        if (is_array($extraFields)) {
+            foreach ($extraFields as $key => $val) {
+                if ($key >= $extraFieldCount)
+                    unset($settings['backend_profile']['fields'][$key]);
+            }
         }
         
-        unset( $settings['action'] );
-        unset( $settings['pf_nonce'] );
-        unset( $settings['is_ajax'] );
-        unset( $settings['backend_profile']['field_count'] );
-         
-        $settings = apply_filters( 'user_meta_pre_configuration_update', $settings, 'settings' );
+        unset($settings['action']);
+        unset($settings['pf_nonce']);
+        unset($settings['is_ajax']);
+        unset($settings['backend_profile']['field_count']);
         
-        $userMeta->updateData( 'settings', $settings );
+        $settings = apply_filters('user_meta_pre_configuration_update', $settings, 'settings');
         
-        echo $userMeta->showMessage( __( 'Settings successfully saved.', $userMeta->name ) );
+        $userMeta->updateData('settings', $settings);
+        
+        echo $userMeta->showMessage(__('Settings successfully saved.', $userMeta->name));
         die();
     }
-    
 }
-endif;

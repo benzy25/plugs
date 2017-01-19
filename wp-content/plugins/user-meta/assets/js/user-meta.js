@@ -1,3 +1,87 @@
+(function($){
+    
+    var userMeta = userMeta || {};
+    
+    userMeta.common = {
+        init: function() {}
+    }
+    
+    userMeta.front = {
+        
+        init: function() {
+            $('.um_generated_form').each(function(){
+                userMeta.front.initForm( this );
+            });
+        },
+        
+        initForm: function( editor ) {
+            this.editor = $(editor);
+            this.load();
+            this.events();
+        },
+        
+        load: function() {
+            $('.um_user_form').validationEngine();
+            $('.um_rich_text').wysiwyg({initialContent:' '});
+            $('input, textarea').placeholder();
+            umFileUploader();
+        },
+         
+        events: function() {
+            this.editor.on('change', '.um_parent', this.chekConditions);
+        },
+        
+        chekConditions: function() {
+            var editor = userMeta.front.editor;
+            
+            editor.find('script[type="text/json"].um_condition').each(function(){
+                try {
+                    var condition = JSON.parse($(this).text());
+                    
+                    var evals = [];
+                    
+                    $.each( condition.rules, function() {
+                        target =  editor.find('.um_field_' + this.field_id).val();
+                        switch ( this.condition ) {
+                            case 'is' :
+                                evals.push(target == this.value ? true : false);
+                            break;
+
+                            case 'is_not' :
+                                evals.push(target != this.value ? true : false);
+                            break;
+                        }
+                    })
+                    
+                    var result = evals[0];
+                    
+                    if ( evals.length > 1 ) {
+                        for ( var i = 1; i < evals.length; i++ ) {
+                            if ( 'and' == condition.relation ) {
+                                result = result && evals[ i ];
+                            } else {
+                                result = result || evals[ i ];
+                            }
+                        }
+                    }
+
+                    if ( ( ( 'show' == condition.visibility ) && ! result ) || ( ( 'hide' == condition.visibility ) && result ) ) {
+                        $(this).closest('.um_field_container').hide();
+                    } else {
+                        $(this).closest('.um_field_container').show();
+                    }
+                    
+                } catch (err) {} 
+            });
+        }
+    };
+    
+    $(function() {
+        userMeta.common.init();
+        userMeta.front.init();
+    });
+    
+})(jQuery);
 
 var umAjaxRequest;
 
@@ -141,7 +225,7 @@ function umPageNavi(pageID, isNext, element) {
     jQuery(formID).children("#um_page_segment_" + pageID ).fadeIn('slow');    
 }
 
-function umFileUploader(uploadScript) {
+function umFileUploader() {
     jQuery(".um_file_uploader_field").each(function(index) {
 
         var divID = jQuery(this).attr("id");
@@ -162,7 +246,7 @@ function umFileUploader(uploadScript) {
             // pass the dom node (ex. $(selector)[0] for jQuery users)
             element: document.getElementById(divID),
             // path to server-side upload script
-            action: ajaxurl,//uploadScript,
+            action: ajaxurl,
             params: {"action":"um_file_uploader", "field_name":jQuery(this).attr("name"), field_id:fieldID, form_key:formKey, "pf_nonce":pf_nonce },
             allowedExtensions: allowedExtensions.split(","),
             sizeLimit: maxSize,
@@ -182,8 +266,8 @@ function umFileUploader(uploadScript) {
                 } else if ( responseJSON.field_name == 'csv_upload_user_import' ) {
                     arg = arg + '&step=one';                   
                     pfAjaxCall( handle, 'um_user_import', arg, function(data){
-                        //jQuery('#'+fieldID+'_result').empty().append( data );   
-                        jQuery(handle).parents(".meta-box-sortables").replaceWith(data);    
+                    	jQuery("#csv_upload_user_import_result").html(data);  
+                        //jQuery(handle).parents(".meta-box-sortables").replaceWith(data);    
                     });                    
                 } else {
                     pfAjaxCall( handle, 'um_show_uploaded_file', arg, function(data) {
@@ -194,7 +278,6 @@ function umFileUploader(uploadScript) {
         });         
     });
 }
-
 
 function umShowImage(element) {
     url = jQuery(element).val();
@@ -209,12 +292,12 @@ function umShowImage(element) {
     });
 }
   
-  
 function umRemoveFile(element) {
-    if (confirm("Confirm to remove? ")) {
-        fieldName = jQuery(element).attr("name");
+    if (confirm(fileuploader.confirm_remove)) {
+        fieldName = jQuery(element).attr("data-field_name");
+        jQuery(element).parents(".um_field_container").find(".qq-upload-success").remove();
         jQuery(element).parents(".um_field_result").empty().append("<input type='hidden' name='"+fieldName+"' value='' />");         
-    }   
+    }
 }    
 
 function umUpgradeFromPrevious(element) {
@@ -237,92 +320,3 @@ function umConditionalRequired(field, rules, i, options) {
     if (jQuery('#' + baseField).val().length > 0 && field.val().length == 0)
         rules.push('required'); 
 }
-
-
-
-(function($){
-    
-    var userMeta = userMeta || {};
-    
-    userMeta.common = {
-        
-        init: function() {
-            
-        }
-        
-    }
-    
-    userMeta.front = {
-        
-        init: function() {
-            $('.um_generated_form').each(function(){
-                userMeta.front.initForm( this );
-            });
-        },
-        
-        initForm: function( editor ) {
-            this.editor = $(editor);
-            this.events();
-        },
-        
-        load: function() {
-            $('.um_user_form').validationEngine();
-            $('.um_rich_text').wysiwyg({initialContent:' '});
-            $('input, textarea').placeholder();
-        },
-         
-        events: function() {
-            this.editor.on('change', '.um_parent', this.chekConditions);
-        },
-        
-        chekConditions: function() {
-            var editor = userMeta.front.editor;
-            
-            editor.find('script[type="text/json"].um_condition').each(function(){
-                try {
-                    var condition = JSON.parse($(this).text());
-                    
-                    var evals = [];
-                    
-                    $.each( condition.rules, function() {
-                        target =  editor.find('.um_field_' + this.field_id).val();
-                        switch ( this.condition ) {
-                            case 'is' :
-                                evals.push(target == this.value ? true : false);
-                            break;
-
-                            case 'is_not' :
-                                evals.push(target != this.value ? true : false);
-                            break;
-                        }
-                    })
-                    
-                    var result = evals[0];
-                    
-                    if ( evals.length > 1 ) {
-                        for ( var i = 1; i < evals.length; i++ ) {
-                            if ( 'and' == condition.relation ) {
-                                result = result && evals[ i ];
-                            } else {
-                                result = result || evals[ i ];
-                            }
-                        }
-                    }
-
-                    if ( ( ( 'show' == condition.visibility ) && ! result ) || ( ( 'hide' == condition.visibility ) && result ) ) {
-                        $(this).closest('.um_field_container').hide();
-                    } else {
-                        $(this).closest('.um_field_container').show();
-                    }
-                    
-                } catch (err) {} 
-            });
-        }
-    };
-    
-    $(function() {
-        userMeta.common.init();
-        userMeta.front.init();
-    });
-    
-})(jQuery);

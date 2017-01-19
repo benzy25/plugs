@@ -1,66 +1,65 @@
 <?php
-global $userMeta; 
+global $userMeta;
 // Expected: $actionTypes, $formsList, $roles
 ?>
-<div id="um_shortcode_popup" style="display:none;">
+<div id="um_shortcode_popup" style="display: none;">
     <?php
-
-    echo $userMeta->createInput( 'action_type', 'select', array(
-        'value'         => '',
-        'label'         => __( 'Action Type', $userMeta->name ),
-        'id'            => 'um_action_type',
-        'class'         => 'um_input',
-        'label_class'   => 'pf_label',
-        'after'         => ' <span>(' . __( 'Required', $userMeta->name ) . ')</span>' ,
-        'enclose'       => 'p'
-    ), $actionTypes );   
-
-    echo $userMeta->createInput( 'form_name', 'select', array(
-        'value'         => '',
-        'label'         => __( 'Form Name', $userMeta->name ),
-        'id'            => 'um_form_name',
-        'class'         => 'um_input',
-        'label_class'   => 'pf_label',
-        'after'         => ' <span id="um_is_form_required"></span>' ,
-        'enclose'       => 'p'
-    ), $formsList );      
+    
+    echo $userMeta->createInput('action_type', 'select', array(
+        'value' => '',
+        'label' => __('Action Type', $userMeta->name),
+        'id' => 'um_action_type',
+        'class' => 'um_input',
+        'label_class' => 'pf_label',
+        'after' => ' <span>(' . __('Required', $userMeta->name) . ')</span>',
+        'enclose' => 'p'
+    ), $actionTypes);
+    
+    echo $userMeta->createInput('form_name', 'select', array(
+        'value' => '',
+        'label' => __('Form Name', $userMeta->name),
+        'id' => 'um_form_name',
+        'class' => 'um_input',
+        'label_class' => 'pf_label',
+        'after' => ' <span id="um_is_form_required"></span>',
+        'enclose' => 'p'
+    ), $formsList);
     
     echo '<div id="um_rolebased_container" style="display:none">';
     
-        echo $userMeta->createInput( 'um_rolebased_link', 'checkbox', array( 
-            'label'     => '<strong>' . __( 'Use role based user profile (advanced)', $userMeta->name ) . '</strong>',
-            'id'        => 'um_rolebased_link',
-            'enclose'   => 'p',
-        ) );     
-
-        echo '<div id="um_rolebased_content" style="display:none">';   
-            echo '<p><em>(' . __( 'Assign form to user role. Leave blank for using default form', $userMeta->name ) . ')</em></p>';
-            foreach( $roles as $roleName => $roleTitle ){
-                echo $userMeta->createInput( "rolebased[$roleName]", 'select', array(
-                    'value'         => '',
-                    'label'         => $roleTitle,
-                    'id'            => 'um_rolebased_' . $roleName,
-                    'class'         => 'um_rolebased',
-                    'label_class'   => 'um_label_left',
-                    'enclose'       => 'div'
-                ), $formsList );        
-            }       
-        echo '</div>';       
-   echo '</div>';
-
-    echo $userMeta->createInput( '', 'button', array(
-        'value'         => __( 'Insert Shortcode', $userMeta->name ),
-        'id'            => 'um_generator_button',
-        'class'         => 'button-primary',
-        'enclose'       => 'p'
-    ) );
+    echo $userMeta->createInput('um_rolebased_link', 'checkbox', array(
+        'label' => '<strong>' . __('Use role based user profile (advanced)', $userMeta->name) . '</strong>',
+        'id' => 'um_rolebased_link',
+        'enclose' => 'p'
+    ));
     
-
+    echo '<div id="um_rolebased_content" style="display:none">';
+    echo '<p><em>(' . __('Assign form to user role. Leave blank for using default form', $userMeta->name) . ')</em></p>';
+    foreach ($roles as $roleName => $roleTitle) {
+        echo $userMeta->createInput("rolebased[$roleName]", 'select', array(
+            'value' => '',
+            'label' => $roleTitle,
+            'id' => 'um_rolebased_' . $roleName,
+            'class' => 'um_rolebased',
+            'label_class' => 'um_label_left',
+            'enclose' => 'div'
+        ), $formsList);
+    }
+    echo '</div>';
+    echo '</div>';
+    
+    echo $userMeta->createInput('', 'button', array(
+        'value' => __('Insert Shortcode', $userMeta->name),
+        'id' => 'um_generator_button',
+        'class' => 'button-primary',
+        'enclose' => 'p'
+    ));
+    
     ?>
 </div>
 
 <?php if ( ! $userMeta->isPro() ){ ?>
-    <script type="text/javascript">
+<script type="text/javascript">
         jQuery(document).ready(function(){
             jQuery("#um_action_type option").each(function(){
                 if( jQuery(this).text() == "login" )
@@ -70,7 +69,7 @@ global $userMeta;
     </script>
 <?php } ?>
 
-    
+
 <script type="text/javascript">
     jQuery(document).ready(function(){
         jQuery("#um_action_type").change(function(){
