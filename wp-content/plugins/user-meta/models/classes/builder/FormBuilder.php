@@ -31,14 +31,14 @@ class FormBuilder extends FormBase
      *
      * @param (string) $editor:
      *            fields_editor, form_editor, form_generate
-     * @param (string) $formName
+     * @param (string) $formName            
      */
     function __construct($editor = null, $formName = null)
     {
         parent::__construct($formName);
-
+        
         $this->editor = $editor;
-
+        
         if (! empty($this->editor))
             $this->_initEditor();
     }
@@ -46,12 +46,12 @@ class FormBuilder extends FormBase
     private function _initEditor()
     {
         $this->nonce = wp_create_nonce('pf' . ucwords($this->editor));
-
+        
         switch ($this->editor) {
-
+            
             case 'fields_editor':
                 break;
-
+            
             case 'form_editor':
                 $this->_elementList();
                 $this->_setFormFieldsDropdown();
@@ -62,20 +62,20 @@ class FormBuilder extends FormBase
     private function _setFormFieldsDropdown()
     {
         global $userMeta;
-
+        
         $fieldsType = $userMeta->umFields();
-
+        
         $fieldsList = array();
         if (! empty($this->data['fields']) && is_array($this->data['fields'])) {
             foreach ($this->data['fields'] as $id => $field) {
                 if (empty($field['field_type']))
                     continue;
-
+                
                 if (! empty($fieldsType[$field['field_type']]['field_group'])) {
                     if ('formatting' == $fieldsType[$field['field_type']]['field_group'])
                         continue;
                 }
-
+                
                 $typeTitle = $fieldsType[$field['field_type']]['title'];
                 $label = 'ID:' . $id . ' (' . $typeTitle . ') ';
                 if (! empty($field['field_title']))
@@ -83,7 +83,7 @@ class FormBuilder extends FormBase
                 $fieldsList[$id] = $label;
             }
         }
-
+        
         FieldBuilder::$formFieldsDropdown = $fieldsList;
     }
 
@@ -93,35 +93,35 @@ class FormBuilder extends FormBase
     private function _elementList()
     {
         global $userMeta;
-
+        
         $elements = array(
             'button_title' => array(
                 'label' => __('Submit Button Title', $userMeta->name),
-                'placeholder' => 'Keep blank for default value'
+                'placeholder' => __('Keep blank for default value', $userMeta->name)
             ),
             'button_class' => array(
                 'label' => __('Submit Button Class', $userMeta->name),
-                'placeholder' => 'Assign class to submit button'
+                'placeholder' => __('Assign class to submit button', $userMeta->name)
             ),
             'form_class' => array(
                 'label' => __('Form Class', $userMeta->name),
-                'placeholder' => 'Keep blank for default value'
+                'placeholder' => __('Keep blank for default value', $userMeta->name)
             ),
             'disable_ajax' => array(
                 'type' => 'checkbox',
                 'label' => __('Do not use AJAX submit', $userMeta->name)
             )
         );
-
+        
         $this->elements = $elements;
     }
 
     function displaySettings()
     {
         global $userMeta;
-
+        
         extract($this->data);
-
+        
         $html = null;
         foreach ($this->elements as $name => $args) {
             $args = wp_parse_args($args, array(
@@ -132,34 +132,34 @@ class FormBuilder extends FormBase
                 'field_enclose' => 'div class="col-sm-6"',
                 'enclose' => 'div class="form-group"'
             ));
-
+            
             $type = $args['type'];
             unset($args['type']);
-
+            
             if ('checkbox' == $type) {
                 $args['label_class'] = 'col-sm-offset-2 col-sm-6';
                 $args['field_enclose'] = '';
                 $args['enclose'] = 'p class="form-group"';
             }
-
+            
             $options = array();
             if (isset($args['options'])) {
                 $options = $args['options'];
                 unset($args['options']);
             }
-
+            
             $html .= $userMeta->createInput($name, $type, $args, $options);
         }
-
+        
         $html = '<div class="form-horizontal" role="form">' . $html . '</div>';
-
+        
         return $html;
     }
 
     function displayFormFields()
     {
         global $userMeta;
-
+        
         if (! empty($this->data['fields']) && is_array($this->data['fields'])) {
             foreach ($this->data['fields'] as $field) {
                 $fieldBuilder = new FieldBuilder($field);
@@ -172,7 +172,7 @@ class FormBuilder extends FormBase
     function displayAllFields()
     {
         global $userMeta;
-
+        
         foreach ($this->sharedFields as $id => $field) {
             $field['id'] = $id;
             $fieldBuilder = new FieldBuilder($field);
@@ -184,17 +184,17 @@ class FormBuilder extends FormBase
     function getMaxFieldID()
     {
         global $userMeta;
-
+        
         $config = $userMeta->getData('config');
-
+        
         if (! empty($config['max_field_id']))
             return (int) $config['max_field_id'];
-
+        
         $maxs = array();
-
+        
         if (! empty($this->sharedFields))
             $maxs[] = max(array_keys($this->sharedFields));
-
+        
         $forms = $this->getRawForms();
         if (! empty($forms) && is_array($forms)) {
             foreach ($forms as $form) {
@@ -202,20 +202,20 @@ class FormBuilder extends FormBase
                     $maxs[] = max(array_keys($form['fields']));
             }
         }
-
+        
         return ! empty($maxs) ? max($maxs) : 0;
     }
 
     function setMaxFieldID($id = 0)
     {
         global $userMeta;
-
+        
         if (empty($id))
             $id = $this->maxID;
-
+        
         if (empty($id))
             return;
-
+        
         $config = $userMeta->getData('config');
         $config = is_array($config) ? $config : array();
         $config['max_field_id'] = (int) $id;
@@ -236,16 +236,16 @@ class FormBuilder extends FormBase
     function fieldsSelectorPanels()
     {
         global $userMeta;
-
+        
         $fieldTypes = $userMeta->umFields();
-
+        
         $nonce = wp_create_nonce('pf' . ucwords('add_field'));
-
+        
         $fieldsGroup = array();
         foreach ($fieldTypes as $name => $field) {
             if (empty($field))
                 continue;
-
+            
             $disbled = ! $field['is_free'] && ! $userMeta->isPro() ? true : false;
             if ($disbled)
                 continue;
@@ -253,19 +253,19 @@ class FormBuilder extends FormBase
                 'disable' => $disbled,
                 'nonce' => $nonce
             ));
-
+            
             if (isset($fieldsGroup[$field['field_group']]))
                 $fieldsGroup[$field['field_group']] .= $button;
             else
                 $fieldsGroup[$field['field_group']] = $button;
         }
-
+        
         $fieldsGroupTitle = array(
-            'wp_default' => 'WordPress Default Fields',
-            'standard' => 'Extra Fields',
-            'formatting' => 'Formatting Fields'
+            'wp_default' => __('WordPress Default Fields', $userMeta->name),
+            'standard' => __('Extra Fields', $userMeta->name),
+            'formatting' => __('Formatting Fields', $userMeta->name)
         );
-
+        
         foreach ($fieldsGroup as $key => $body) {
             $userMeta->buildPanel($fieldsGroupTitle[$key], $body);
         }
@@ -275,18 +275,18 @@ class FormBuilder extends FormBase
     {
         global $userMeta;
         $fieldsType = $userMeta->umFields();
-
+        
         $nonce = wp_create_nonce('pf' . ucwords('add_field'));
-
+        
         $buttons = null;
         foreach ($this->sharedFields as $id => $field) {
             $typeTitle = $fieldsType[$field['field_type']]['title'];
             $label = 'ID:' . $id . ' (' . $typeTitle . ') ';
             if (! empty($field['field_title']))
                 $label .= $field['field_title'];
-
+            
             $hidden = isset($this->data['fields'][$id]) ? true : false;
-
+            
             $buttons .= $this->_createButton($field['field_type'], $label, array(
                 'id' => $id,
                 'hidden' => $hidden,
@@ -294,8 +294,8 @@ class FormBuilder extends FormBase
                 'is_shared' => true
             ));
         }
-
-        $userMeta->buildPanel('Shared Fields', $buttons);
+        
+        $userMeta->buildPanel(__('Shared Fields', $userMeta->name), $buttons);
     }
 
     private function _createButton($type, $label, $args = array())
@@ -303,21 +303,21 @@ class FormBuilder extends FormBase
         $id = ! empty($args['id']) ? $args['id'] : 0;
         $class = ! empty($id) ? 'col-xs-12' : 'col-xs-5.5';
         $more = '';
-
+        
         $btnClass = 'btn-default';
         if (! empty($args['is_shared'])) {
             $more .= ' data-is-shared="1"';
             $btnClass = 'btn-info';
         }
-
+        
         if (! empty($args['disable'])) {
             $class = ' pf_blure';
             $more .= ' onclick="umGetProMessage(this)"';
         }
-
+        
         if (! empty($args['hidden']))
             $more .= ' style="display:none"';
-
+        
         return "<button type=\"button\" data-field-type=\"$type\" data-field-id=\"$id\"" . "data-nonce=\"{$args['nonce']}\" $more class=\"btn $btnClass um_field_selecor $class\" >$label</button>";
     }
 
@@ -328,7 +328,7 @@ class FormBuilder extends FormBase
     {
         if (! is_array($fields))
             return array();
-
+        
         /**
          * Changing to array key
          */
@@ -336,20 +336,20 @@ class FormBuilder extends FormBase
         foreach ($fields as $field) {
             if (empty($field['id']))
                 continue;
-
+            
             $id = $field['id'];
             unset($field['id']);
             $sanitize[$id] = $field;
         }
         $fields = $sanitize;
-
+        
         $sysMaxID = $this->getMaxFieldID();
         $formInitID = (int) esc_attr($_POST['init_max_id']);
         $formMaxID = (int) esc_attr($_POST['max_id']);
-
+        
         if (($sysMaxID > $formInitID) && ($formMaxID > $formInitID)) {
             $diff = $sysMaxID - $formInitID;
-
+            
             $sanitize = array();
             foreach ($fields as $id => $field) {
                 if ($id > $formInitID)
@@ -358,16 +358,16 @@ class FormBuilder extends FormBase
                     $sanitize[$id] = $field;
             }
             $fields = $sanitize;
-
+            
             $this->maxID = $formMaxID + $diff;
-
+            
             if (! empty($_SERVER['HTTP_REFERER']))
                 $this->redirect_to = $_SERVER['HTTP_REFERER'];
         } elseif ($formMaxID > $formInitID) {
             $this->maxID = $formMaxID;
         } else
             $this->maxID = 0;
-
+        
         return $fields;
     }
 }

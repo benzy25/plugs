@@ -7,8 +7,7 @@ $formBuilder = new FormBuilder('fields_editor');
 ?>
 
 <div class="wrap">
-
-	<h2><?php _e('Shared Fields', $userMeta->name); ?></h2>
+	<h1><?php _e('Shared Fields', $userMeta->name); ?></h1>
 	<p><?php _e('Click field from right side panel for creating a new field', $userMeta->name); ?></p>
     <?php do_action( 'um_admin_notice' ); ?>
     
@@ -34,7 +33,7 @@ $formBuilder = new FormBuilder('fields_editor');
 
 				<p class="">
 					<button style="float: right" type="button"
-						class="um_save_button btn btn-primary">Save Changes</button>
+						class="um_save_button btn btn-primary"><?= __('Save Changes', $userMeta->name) ?></button>
 				</p>
 				<p class="um_clear"></p>
 				<p class="um_error_msg"></p>

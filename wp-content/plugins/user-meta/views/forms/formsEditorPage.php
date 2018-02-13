@@ -28,10 +28,10 @@ global $userMeta;
                     'panel_class' => 'panel-default'
                 ];
                 echo panel(__('Get started', $userMeta->name), $userMeta->boxHowToUse(), $panelArgs);
-                if (empty($userMeta->isPro)) {
+                /*if (empty($userMeta->isPro)) {
                     echo panel(__('Live Demo', $userMeta->name), $userMeta->boxLiveDemo(), $panelArgs);
                     echo panel(__('User Meta Pro', $userMeta->name), $userMeta->boxGetPro(), $panelArgs);
-                }
+                }*/
                 echo panel(__('Shortcodes', $userMeta->name), $userMeta->boxShortcodesDocs(), $panelArgs);
                 echo panel(__('Useful Links', $userMeta->name), $userMeta->boxLinks(), $panelArgs);
                 ?>

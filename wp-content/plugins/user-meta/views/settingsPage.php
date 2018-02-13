@@ -4,7 +4,7 @@ global $userMeta;
 ?>
 
 <div class="wrap">
-	<h2><?php _e( 'User Meta Settings', $userMeta->name ); ?></h2>
+	<h1><?php _e( 'User Meta Settings', $userMeta->name ); ?></h1>
     <?php do_action( 'um_admin_notice' ); ?>
     <div id="dashboard-widgets-wrap">
 		<div class="metabox-holder">
@@ -17,7 +17,7 @@ global $userMeta;
                 $title = array(
                     'general' => __('General', $userMeta->name),
                     'login' => __('Login', $userMeta->name),
-                    'registration' => $isPro ? __('Registration', $userMeta->name) : '<span class="pf_blure">' . __('Registration', $userMeta->name) . '</span>',
+                    'registration' => __('Registration', $userMeta->name),
                     'redirection' => $isPro ? __('Redirection', $userMeta->name) : '<span class="pf_blure">' . __('Redirection', $userMeta->name) . '</span>',
                     'profile' => $isPro ? __('Backend Profile', $userMeta->name) : '<span class="pf_blure">' . __('Backend Profile', $userMeta->name) . '</span>'
                 );
@@ -28,9 +28,9 @@ global $userMeta;
 					<div id="um_settings_tab">
 						<ul>
 							<li><a href="#um_settings_general"><?php echo $title['general']; ?></a></li>
-							<?php if($isPro) {?>
 							<li><a href="#um_settings_login"><?php echo $title['login']; ?></a></li>
 							<li><a href="#um_settings_registration"><?php echo $title['registration']; ?></a></li>
+							<?php if($isPro) {?>
 							<li><a href="#um_settings_redirection"><?php echo $title['redirection']; ?></a></li>
 							<li><a href="#um_settings_backend_profile"><?php echo $title['profile']; ?></a></li>
 							<?php }?>
@@ -50,21 +50,17 @@ global $userMeta;
                         ), "settings");
                         echo '</div>';
                         
-                        if ($isPro) {
-                            echo '<div id="um_settings_login">';
-                            echo $userMeta->renderPro("loginSettings", array(
-                                'login' => isset($settings['login']) ? $settings['login'] : $default['login']
-                            ), "settings");
-                            echo '</div>';
-                        }
+                        echo '<div id="um_settings_login">';
+                        echo $userMeta->renderPro("loginSettings", array(
+                            'login' => isset($settings['login']) ? $settings['login'] : $default['login']
+                        ), "settings");
+                        echo '</div>';
                         
-                        if ($isPro) {
-                            echo '<div id="um_settings_registration">';
-                            echo $userMeta->renderPro("registrationSettings", array(
-                                'registration' => isset($settings['registration']) ? $settings['registration'] : $default['registration']
-                            ), "settings");
-                            echo '</div>';
-                        }
+                        echo '<div id="um_settings_registration">';
+                        echo $userMeta->renderPro("registrationSettings", array(
+                            'registration' => isset($settings['registration']) ? $settings['registration'] : $default['registration']
+                        ), "settings");
+                        echo '</div>';
                         
                         if ($isPro) {
                             echo '<div id="um_settings_redirection">';
@@ -115,10 +111,10 @@ global $userMeta;
                     'panel_class' => 'panel-default'
                 ];
                 echo $userMeta->metaBox(__('Get started', $userMeta->name), $userMeta->boxHowToUse());
-                if (! @$userMeta->isPro) {
+                /*if (! @$userMeta->isPro) {
                     echo $userMeta->metaBox(__('Live Demo', $userMeta->name), $userMeta->boxLiveDemo());
                     echo $userMeta->metaBox(__('User Meta Pro', $userMeta->name), $userMeta->boxGetPro());
-                }
+                }*/
                 echo $userMeta->metaBox('Shortcodes', $userMeta->boxShortcodesDocs());
                 // echo $userMeta->metaBox( __( 'Tips', $userMeta->name ), $userMeta->boxTips(), false, false);
                 ?>

@@ -4,9 +4,11 @@ namespace UserMeta;
 /**
  * Handle everyting for user profile update and user registration.
  *
+ * This class has been also usd by backend profile and users import features.
+ *
  * @since 1.1.7
  *       
- * @author khaled Hossain
+ * @author Khaled Hossain
  */
 class UserInsert
 {
@@ -322,7 +324,7 @@ class UserInsert
         global $userMeta;
         $errors = new \WP_Error();
         
-        $this->run();
+        $this->runHooks();
         
         // Determine Fields
         $userdata = array();
@@ -422,22 +424,25 @@ class UserInsert
     /**
      * Run action hooks.
      */
-    public function run()
+    private function runHooks()
     {
         add_action('profile_update', array(
             $this,
-            'updateMetaData'
+            '_updateMetaData'
         ));
         add_action('user_register', array(
             $this,
-            'addMetaData'
+            '_addMetaData'
         ));
     }
 
     /**
      * Update user meta data by using action hooks.
+     *
+     * This method is only called inside this class.
+     * Using public visibility because of calling by action hook.
      */
-    public function updateMetaData($user_id)
+    public function _updateMetaData($user_id)
     {
         if (! empty($this->metaData) && is_array($this->metaData)) {
             foreach ($this->metaData as $key => $val) {
@@ -448,8 +453,11 @@ class UserInsert
 
     /**
      * Add user meta data by using action hooks.
+     *
+     * This method is only called inside this class.
+     * Using public visibility because of calling by action hook.
      */
-    public function addMetaData($user_id)
+    public function _addMetaData($user_id)
     {
         if (! empty($this->metaData) && is_array($this->metaData)) {
             foreach ($this->metaData as $key => $val) {
@@ -582,11 +590,15 @@ class UserInsert
         }
         
         $role = $userMeta->getUserRole($response['ID']);
-        $redirect_to = $userMeta->getRedirectionUrl(null, 'registration', $role);
+        $redirect_to = null;
+        if ($userMeta->isPro())
+            $redirect_to = $userMeta->getRedirectionUrl($redirect_to, 'registration', $role);
         
         if ($activation == 'auto_active') {
             if (! empty($registrationSettings['auto_login'])) {
-                $customUser = $userMeta->doLogin($response);
+                $customUser = (new Login())->login($response);
+                // Commented since 1.2.1
+                // $customUser = $userMeta->doLogin($response);
                 if (empty($redirect_to) && ! empty($customUser->redirect_to))
                     $redirect_to = $customUser->redirect_to;
             }
@@ -666,6 +678,20 @@ class UserInsert
     }
 
     /**
+     * Handle users import by UserImportController
+     *
+     * @param unknown $userdata            
+     * @param unknown $user_id            
+     */
+    public function importUsersProcess($userdata, $user_id = null)
+    {
+        $this->userData = $userdata;
+        $this->setMetaData();
+        
+        return $this->insertUser($userdata, $user_id);
+    }
+
+    /**
      * Validate user's input.
      * Add error to $errors object.
      * Assign sanitized array to $userMetaCache->backend_profile_fields.
@@ -682,7 +708,7 @@ class UserInsert
         $this->sanitizeFields();
         
         if (! $this->errors->get_error_codes()) {
-            $this->run();
+            $this->runHooks();
         }
     }
 }

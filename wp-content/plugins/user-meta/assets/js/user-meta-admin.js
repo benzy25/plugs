@@ -31,7 +31,7 @@
                 url: ajaxurl,
                 data: arg,
                 beforeSend: function() {
-                    $(".um_save_button").html('<i class="fa fa-spin fa-circle-o-notch"></i> Saving');
+                    $(".um_save_button").html('<i class="fa fa-spin fa-circle-o-notch"></i> ' + user_meta.saving);
                 },
                 success: function(data) {
 
@@ -46,11 +46,11 @@
 
                     if (data == '1' || (config && typeof config == 'object')) {
                         $(".um_save_button").removeClass('btn-primary').addClass('btn-success');
-                        $(".um_save_button").html('<i class="fa fa-check"></i> Saved');
+                        $(".um_save_button").html('<i class="fa fa-check"></i> ' + user_meta.saved);
                         $(".um_error_msg").html("");
                     } else {
                         $(".um_save_button").removeClass('btn-primary').addClass('btn-danger');
-                        $(".um_save_button").html('Not Saved <i class="fa fa-exclamation-triangle"></i>');
+                        $(".um_save_button").html(user_meta.not_saved + ' <i class="fa fa-exclamation-triangle"></i>');
                         $(".um_error_msg").html('<span class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i> ' + data + '</span>');
                     }
 

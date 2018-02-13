@@ -4,6 +4,9 @@ namespace UserMeta;
 /**
  * Determing user_id based on user_login or user_email from provided array.
  *
+ * @since 1.2
+ * @author Khaled Hossain
+ *        
  * @param array $userData            
  */
 function getUserID(array $userData)

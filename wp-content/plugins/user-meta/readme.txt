@@ -2,18 +2,19 @@
 Contributors: khaledsaikat
 Tags: user, profile, registration, login, frontend, users, usermeta, import, csv, upload, AJAX, admin, plugin, page, image, images, photo, picture, file, email, shortcode, captcha, avatar, redirect, register, password, custom, csv, import, user import, widget
 Requires at least: 3.7
-Tested up to: 4.6
-Stable tag: 1.2
+Tested up to: 4.9
+Stable tag: 1.2.1
 Copyright: Khaled Hossain, user-meta.com
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A well designed, features reached and easy to use user management plugin that allows front-end profile update, user registration with extra fields.
+A well designed, features reached and easy to use user management plugin that allows front-end login, profile update, user registration with extra fields and many more.
 
 == Description ==
 
 = Features =
-* Allows user to update their profile on front-end.
+* Front-end user login.
+* Allows users to update their profile on front-end.
 * Add extra fields to customized user profile.
 * Front-end user registration by shortcode.
 * Add extra fields to custom user registration.
@@ -24,18 +25,19 @@ A well designed, features reached and easy to use user management plugin that al
 * Users can register their account with different role by using different registration form.
 * Show user avatar to profile and registration page (both ajax and non ajax).
 * Modify default email sender information (Let your user get email from your preferred name and email instead of wordpress@example.com)
+* Use conditional logic to show/hide fields based on other fields.
 
 Like this plugin? Consider leaving a [5 star review](https://wordpress.org/support/plugin/user-meta/reviews/?filter=5).
 Your review means a lot to us.
 
 = Extra features for User Meta Pro (paid version) =
 * Front-end custom user login by username or email.
-* Front-end lost password and reset password.
+* Front-end reset password.
 * User Profile widget, registration widget and login widget.
 * Auto user login after registration.
 * Email verification on registration.
 * Admin approval on user registration.
-* Admin can activate or deactivate any user form user listing page.
+* Admin can activate or deactivate any user by user listing page.
 * Add extra fields to default profile or hide existing fields.
 * Role based redirection after user login, logout and registration.
 * Customize emails sent from your WordPress site. Add default field or extra fields content to each email.
@@ -74,8 +76,8 @@ Bellow are the list of supported fields to build profile or registration form:
 * CheckBox
 
 = Extra fields for User Meta Pro (paid version) =
-* Multi select
-* Date /Time
+* Multi-select
+* Date-Time
 * File Upload
 * Image Url
 * Phone Number
@@ -141,6 +143,17 @@ If you have suhosin installed, use following too.
 05. Supported fields for creating profile or registration form.
 
 == Changelog ==
+
+= 1.2.1 =
+* PHP7 compatibility
+* Modify class names according to PSR-2 standard
+* Added more options to captcha
+* Lite: Add login features to lite version
+* Fix: print inline js to backend profile (date-time was not working)
+* Fix: bug on user importing extra fields
+* Fix: Login error message bug
+* Fix: Conditional logic for checkbox, radio, and multi-select
+* Fix: Using multiple captchas on the same page
 
 = 1.2 =
 * Visual options selector for dropdown, multi-select, radio and checkbox

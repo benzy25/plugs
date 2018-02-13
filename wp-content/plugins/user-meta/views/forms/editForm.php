@@ -11,7 +11,7 @@ $formBuilder = new FormBuilder('form_editor', $formName);
 	<div id="um_form_editor">
     
         <?php if( $formName && ! $formBuilder->isFound() ) : ?>
-        <div class="alert alert-danger" role="alert">Form "<?php echo $formName; ?>" is not found. You can create a new form.</div>
+        <?= adminNotice(sprintf(__('Form "%s" is not found. You can create a new form.', $userMeta->name), $formName)); ?>
         <?php endif; ?>
 
         <div class="panel panel-default">
@@ -19,18 +19,18 @@ $formBuilder = new FormBuilder('form_editor', $formName);
 				<div class="form-inline" role="form">
 					<div class="form-group">
 						<div class="input-group">
-							<div class="input-group-addon">Form Name*</div>
+							<div class="input-group-addon"><?= __('Form Name*', $userMeta->name) ?></div>
 							<input type="text" class="form-control" name="form_key"
-								value="<?php echo $formName; ?>"
-								placeholder="Enter unique form name">
+								value="<?= $formName ?>"
+								placeholder="<?= __('Enter unique form name', $userMeta->name) ?>">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<ul class="nav nav-pills um_pills">
 							<li class="nav active danger"><a href="#um_form_fields_tab"
-								data-toggle="tab">Form Builder</a></li>
-							<li class="nav"><a href="#um_form_settings_tab" data-toggle="tab">Settings</a></li>
+								data-toggle="tab"><?= __('Form Builder', $userMeta->name) ?></a></li>
+							<li class="nav"><a href="#um_form_settings_tab" data-toggle="tab"><?= __('Settings', $userMeta->name) ?></a></li>
 						</ul>
 					</div>
 
@@ -39,8 +39,7 @@ $formBuilder = new FormBuilder('form_editor', $formName);
 					</div>
 
 					<div class="form-group pull-right">
-						<button type="button" class="btn btn-primary um_save_button">Save
-							Changes</button>
+						<button type="button" class="btn btn-primary um_save_button"><?= __('Save Changes', $userMeta->name) ?></button>
 					</div>
 
 				</div>
@@ -65,7 +64,7 @@ $formBuilder = new FormBuilder('form_editor', $formName);
 
 						<p class="">
 							<button style="float: right" type="button"
-								class="um_save_button btn btn-primary">Save Changes</button>
+								class="um_save_button btn btn-primary"><?= __('Save Changes', $userMeta->name) ?></button>
 						</p>
 						<p class="um_clear"></p>
 						<p class="um_error_msg"></p>

@@ -4,6 +4,9 @@ namespace UserMeta;
 /**
  * Download file by browser.
  *
+ * @author Khaled Hossain
+ * @since 1.2
+ *       
  * @param string $fileName
  *            Downloaded filename
  * @param callable $callback_echo
@@ -21,6 +24,9 @@ function download($fileName, callable $callback_echo)
 /**
  * Building bootstrap panel.
  *
+ * @author Khaled Hossain
+ * @since 1.2
+ *       
  * @param string $title
  *            Panel title
  * @param string $body
@@ -60,6 +66,9 @@ function panel($title, $body, array $args = [])
 /**
  * Check if current theme supports wp_footer action
  * Related function: umPreloadController::checkWpFooterEnable() in shutdown action hook.
+ *
+ * @author Khaled Hossain
+ * @since 1.2
  */
 function isWpFooterEnabled()
 {
@@ -69,6 +78,9 @@ function isWpFooterEnabled()
 /**
  * Add javascript code to footer
  *
+ * @author Khaled Hossain
+ * @since 1.2
+ *       
  * @param string $code            
  */
 function addFooterJs($code)
@@ -80,7 +92,26 @@ function addFooterJs($code)
 }
 
 /**
+ * Add code to footer
+ *
+ * @author Khaled Hossain
+ * @since 1.2.1
+ *       
+ * @param string $code            
+ */
+function addFooterCode($code)
+{
+    global $userMetaCache;
+    if (empty($userMetaCache->footer_codes))
+        $userMetaCache->footer_codes = null;
+    $userMetaCache->footer_codes .= $code;
+}
+
+/**
  * Print collected JavaScript code in jQuery ready block
+ *
+ * @author Khaled Hossain
+ * @since 1.2
  */
 function printFooterJs()
 {
@@ -92,19 +123,43 @@ function printFooterJs()
 }
 
 /**
+ * Print collected codes
+ *
+ * @author Khaled Hossain
+ * @since 1.2.1
+ */
+function printFooterCodes()
+{
+    global $userMetaCache;
+    if (empty($userMetaCache->footer_codes))
+        return;
+    echo $userMetaCache->footer_codes;
+    unset($userMetaCache->footer_codes);
+}
+
+/**
  * print JavaScript code to footer
+ *
+ * @author Khaled Hossain
+ * @since 1.2
  */
 function footerJs()
 {
     if (isWpFooterEnabled()) {
         add_action('wp_footer', '\UserMeta\printFooterJs', 1000);
-    } else
+        add_action('wp_footer', '\UserMeta\printFooterCodes', 1000);
+    } else {
         printFooterJs();
+        printFooterCodes();
+    }
 }
 
 /**
  * Show notice message in admin screen
  *
+ * @author Khaled Hossain
+ * @since 1.2
+ *       
  * @param string $message            
  * @param string $type
  *            error | success
@@ -115,8 +170,33 @@ function adminNotice($message, $type = 'error')
 }
 
 /**
+ * apply do_action and collect html printed by the hook
+ *
+ * @author Khaled Hossain
+ * @since 1.2
+ *       
+ * @param string $hookName            
+ * @return string
+ */
+function getHookHtml($hookName)
+{
+    global $userMeta;
+    if ($userMeta->isHookEnable($hookName)) {
+        ob_start();
+        do_action($hookName);
+        $html = ob_get_contents();
+        ob_end_clean();
+        
+        return $html;
+    }
+}
+
+/**
  * Dumping data.
  *
+ * @author Khaled Hossain
+ * @since 1.2
+ *       
  * @param mixed $data
  *            Data to dump
  * @param bool $dump

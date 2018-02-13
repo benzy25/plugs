@@ -34,21 +34,35 @@
         chekConditions: function() {
             var editor = userMeta.front.editor;
             
-            editor.find('script[type="text/json"].um_condition').each(function(){
+            editor.find('script[type="text/json"].um_condition').each(function() {
                 try {
-                    var condition = JSON.parse($(this).text());
-                    
+                    var condition = JSON.parse($(this).text());            
                     var evals = [];
                     
                     $.each( condition.rules, function() {
-                        target =  editor.find('.um_field_' + this.field_id).val();
+                    	
+                        var target = [];
+                        $.each(editor.find('.um_field_' + this.field_id), function() {
+                        	var parentField = $(this)
+                        	var tagName = parentField.prop("tagName").toLowerCase();
+                            if (tagName == 'input' && $.inArray(parentField.attr('type'), ['checkbox', 'radio']) > -1) {
+                                if (parentField.is(":checked")) {
+                                    target.push(parentField.val());
+                                }
+                            } else if (tagName == 'select' && parentField.attr('multiple')) {
+                            	target = parentField.val();           
+                            } else {
+                            	target.push(parentField.val());	
+                            }
+                        });
+ 
                         switch ( this.condition ) {
                             case 'is' :
-                                evals.push(target == this.value ? true : false);
+                            	evals.push($.inArray(this.value, target) > -1 ? true : false);
                             break;
 
                             case 'is_not' :
-                                evals.push(target != this.value ? true : false);
+                            	evals.push($.inArray(this.value, target) > -1 ? true : false);
                             break;
                         }
                     })
@@ -66,9 +80,9 @@
                     }
 
                     if ( ( ( 'show' == condition.visibility ) && ! result ) || ( ( 'hide' == condition.visibility ) && result ) ) {
-                        $(this).closest('.um_field_container').hide();
+                        $(this).closest('.um_field_container').hide('slow');
                     } else {
-                        $(this).closest('.um_field_container').show();
+                        $(this).closest('.um_field_container').show('slow');
                     }
                     
                 } catch (err) {} 

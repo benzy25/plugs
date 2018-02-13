@@ -264,14 +264,27 @@ class FieldBuilder
                 'label' => __('Retype Label', $userMeta->name),
                 'placeholder' => __('Label for retype field', $userMeta->name)
             ),
-            'captcha_theme' => array(
+            'captcha_theme' => [
                 'type' => 'select',
                 'label' => __('reCaptcha Theme', $userMeta->name),
-                'options' => array(
+                'options' => [
                     '' => __('Light', $userMeta->name),
                     'dark' => __('Dark', $userMeta->name)
-                )
-            ),
+                ]
+            ],
+            'captcha_type' => [
+                'type' => 'select',
+                'label' => __('reCaptcha Type', $userMeta->name),
+                'options' => [
+                    '' => __('Image', $userMeta->name),
+                    'audio' => __('Audio', $userMeta->name)
+                ]
+            ],
+            'captcha_lang' => [
+                'label' => __('reCaptcha Language', $userMeta->name),
+                'placeholder' => __('(e.g. en) Leave blank for auto detection', $userMeta->name),
+                'info' => __('(e.g. en) Leave blank for auto detection', $userMeta->name)
+            ],
             'resize_image' => array(
                 'type' => 'checkbox',
                 'label' => __('Resize Image', $userMeta->name),
@@ -1086,7 +1099,9 @@ class FieldBuilder
                 ),
                 'captcha' => array(
                     'basic' => array_merge($start1, array(
-                        'captcha_theme'
+                        'captcha_theme',
+                        'captcha_type',
+                        'captcha_lang'
                     ), array(
                         array(
                             'checkbox_group',
@@ -1155,12 +1170,14 @@ class FieldBuilder
     function build()
     {
         global $userMeta;
-        
         $html = null;
-        
         $field = $this->fieldSpecification();
         
-        $tabs = array();
+        $tabsText = [
+            'basic' => __('Basic', $userMeta->name),
+            'advanced' => __('Advanced', $userMeta->name)
+        ];
+        $tabs = [];
         foreach ($field as $key => $group) {
             $inputs = null;
             $inputs .= '<br /><div class="form-horizontal" role="form">';
@@ -1168,7 +1185,7 @@ class FieldBuilder
                 $inputs .= $this->createElement($input);
             }
             $inputs .= '</div>';
-            $tabs[$key] = $inputs;
+            $tabs[$tabsText[$key]] = $inputs;
         }
         
         return $userMeta->buildTabs('fields_tab_' . $this->id, $tabs);

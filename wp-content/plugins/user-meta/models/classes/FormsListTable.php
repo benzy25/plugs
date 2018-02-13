@@ -7,19 +7,21 @@ class FormsListTable extends \WP_List_Table
     function __construct()
     {
         parent::__construct(array(
-            'singular' => 'Form',
-            'plural' => 'Forms',
+            'singular' => __('Form', 'user-meta'),
+            'plural' => __('Forms', 'user-meta'),
             'ajax' => false
         ));
     }
 
     function column_name($item)
     {
+        $editText = __('Edit', 'user-meta');
+        $deleteText = __('Delete', 'user-meta');
         
         // Build row actions
         $actions = array(
-            'edit' => sprintf('<a href="?page=usermeta&form=%s&action=edit">Edit</a>', urlencode($item['form_key'])),
-            'delete' => sprintf('<a href="?page=usermeta&form=%1$s&action=delete" onclick="if(confirm(\'%2$s\')){return true;}return false;">Delete</a>', urlencode($item['form_key']), "You are about to delete this form \'{$item['form_key']}\'.  \'Cancel\' to stop, \'OK\' to delete.")
+            'edit' => sprintf('<a href="?page=usermeta&form=%s&action=edit">' . $editText . '</a>', urlencode($item['form_key'])),
+            'delete' => sprintf('<a href="?page=usermeta&form=%1$s&action=delete" onclick="if(confirm(\'%2$s\')){return true;}return false;">' . $deleteText . '</a>', urlencode($item['form_key']), "You are about to delete this form \'{$item['form_key']}\'.  \'Cancel\' to stop, \'OK\' to delete.")
         );
         
         // Return the title contents
@@ -28,7 +30,7 @@ class FormsListTable extends \WP_List_Table
 
     function column_shortcode($item)
     {
-        return "<p><strong>Profile: </strong>[user-meta-profile form=\"{$item['form_key']}\"]</p>" . "<p><strong>Registration: </strong>[user-meta-registration form=\"{$item['form_key']}\"]</p>";
+        return "<p><strong>" . __('Profile', 'user-meta') . ": </strong>[user-meta-profile form=\"{$item['form_key']}\"]</p>" . "<p><strong>Registration: </strong>[user-meta-registration form=\"{$item['form_key']}\"]</p>";
     }
 
     /**
@@ -50,7 +52,6 @@ class FormsListTable extends \WP_List_Table
             /*$1%s*/ $this->_args['singular'], // Let's simply repurpose the table's singular label ("movie")
         /* $2%s */
         $item['form_key']); // The value of the checkbox should be the record's id
-
     }
 
     function column_default($item, $column_name)
@@ -78,8 +79,8 @@ class FormsListTable extends \WP_List_Table
     {
         $columns = array(
             'cb' => '<input type="checkbox" />', // Render a checkbox instead of text
-            'name' => 'Form Name',
-            'shortcode' => 'Shortcode'
+            'name' => __('Form Name', 'user-meta'),
+            'shortcode' => __('Shortcode', 'user-meta')
         );
         return $columns;
     }
@@ -109,7 +110,7 @@ class FormsListTable extends \WP_List_Table
                 false
             )
         ); // true means it's already sorted
-
+        
         return $sortable_columns;
     }
 
@@ -291,7 +292,6 @@ class FormsListTable extends \WP_List_Table
             'total_items' => $total_items, // WE have to calculate the total number of items
             'per_page' => $per_page, // WE have to determine how many items to show on a page
             'total_pages' => ceil($total_items / $per_page)
-        )) // WE have to calculate the total number of pages
-;
+        )); // WE have to calculate the total number of pages
     }
 }

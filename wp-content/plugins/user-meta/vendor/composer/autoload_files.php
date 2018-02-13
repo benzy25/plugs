@@ -7,5 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     '18deab8a52be96cfc50a45f1edb7ca0b' => $vendorDir . '/user-meta/html/src/wp.php',
-    '114d8f58fbfb2b6d181c173b6a74a6d7' => $baseDir . '/lib/init.php',
+    'fa0b3f6e2c1b8f4cffea4be25916a576' => $baseDir . '/lib/Framework.php',
 );
