@@ -566,7 +566,7 @@ body {
 	margin-top: 50px;
 	font-family: 'proxima-nova', 'Raleway', Helvetica, sans-serif;
 	font-size: 16px;
-	background: url('/wp-content/themes/b2w_theme/assets/img/tile.jpg') top left repeat;
+	background: url('/plugs/wp-content/themes/b2w_theme/assets/img/tile.jpg') top left repeat;
 }
 
 .admin-bar .navbar-fixed-top {top:32px;}
@@ -670,7 +670,7 @@ a.text-danger:hover {
 }
 
 .modal-content{
-	background: url('/wp-content/themes/b2w_theme/assets/img/tile.jpg') top left repeat;
+	background: url('/plugs/wp-content/themes/b2w_theme/assets/img/tile.jpg') top left repeat;
 }
 
 .badge.social {
@@ -706,7 +706,7 @@ i.ci {
 	display: inline-block;
 	height: 40px;
 	width: 40px;
-	background: url('/wp-content/themes/b2w_theme/assets/img/icon-sprite.png') no-repeat;
+	background: url('/plugs/wp-content/themes/b2w_theme/assets/img/icon-sprite.png') no-repeat;
 }
 
 .ci.ci-computer 	{ background-position: 0 0; }
@@ -797,7 +797,7 @@ form textarea {
 /* ==== HERO ==== */
 
 #hero {
-	background: url('/wp-content/themes/b2w_theme/assets/img/hero-bg.jpg') 50% 0 repeat fixed;
+	background: url('/plugs/wp-content/themes/b2w_theme/assets/img/hero-bg.jpg') 50% 0 repeat fixed;
 	min-height: 500px;
 	position: relative;
 	display: table;
@@ -904,12 +904,12 @@ section.main-content {
 }
 
 .feature-image-default {
-	background: url('/wp-content/themes/b2w_theme/assets/img/stuff-feature.jpg') no-repeat;
+	background: url('/plugs/wp-content/themes/b2w_theme/assets/img/stuff-feature.jpg') no-repeat;
 	background-size: cover;
 }
 
 .feature-image-default-alt {
-	background: url('/wp-content/themes/b2w_theme/assets/img/hipster-stuff.jpg') no-repeat;
+	background: url('/plugs/wp-content/themes/b2w_theme/assets/img/hipster-stuff.jpg') no-repeat;
 	background-size: cover;
 }
 
@@ -948,14 +948,14 @@ section.main-content {
 }
 
 #featurette {
-	background: url('/wp-content/themes/b2w_theme/assets/img/stuff-bg.jpg') 50% 100% repeat fixed;
+	background: url('/plugs/wp-content/themes/b2w_theme/assets/img/stuff-bg.jpg') 50% 100% repeat fixed;
 	background-size: cover;
 	text-align: center;
 	color: white;
 }
 
 #instructor {
-	background: white url('/wp-content/themes/b2w_theme/assets/img/brad-elvis.png') 90% -10px no-repeat;
+	background: white url('/plugs/wp-content/themes/b2w_theme/assets/img/brad-elvis.png') 90% -10px no-repeat;
 }
 
 #instructor h2 {
@@ -1004,7 +1004,7 @@ section.main-content {
 
 #signup {
 	text-align: center;
-	background: url('/wp-content/themes/b2w_theme/assets/img/hipster-stuff.jpg') center center repeat fixed;
+	background: url('/plugs/wp-content/themes/b2w_theme/assets/img/hipster-stuff.jpg') center center repeat fixed;
 	background-size: cover;
 	color: white;
 	padding: 140px 0;
