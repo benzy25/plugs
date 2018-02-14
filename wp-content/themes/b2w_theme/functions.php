@@ -155,3 +155,8 @@ require get_template_directory() . '/inc/customizer.php';
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
+
+
+/*** var_dump_ array/string all cute and pretty  ***/
+function _pre($array) { echo '<pre>'; print_r ($array); echo '</pre>'; }
+/*** END ***/

@@ -1,7 +1,16 @@
 <?php
 /*
 Template Name: Home Page
- */
+*/
+
+// basic custom fields
+$prelaunch_price    = get_post_meta(206, 'prelaunch_price', true);
+$launch_price       = get_post_meta(206, 'launch_price', true);
+$final_price        = get_post_meta(206, 'final_price', true);
+$course_url         = get_post_meta(206, 'course_url', true);
+$button_text        = get_post_meta(206, 'button_text', true);
+$optin_text         = get_post_meta(206, 'optin_text', true);
+$optin_button_text  = get_post_meta(206, 'optin_button_text', true);
 
 get_header(); ?>
 
@@ -17,25 +26,25 @@ get_header(); ?>
         </div><!-- col -->
 
         <div class="col-sm-7 hero-text">
-          <h1>Bootstrap to WordPress</h1>
-              <p class="lead">Earn An Extra $1k - $5k a Month by Learning to Code Your Very Own Responsive &amp; Custom WordPress Websites with Bootstrap</p>
+          <h1><?php bloginfo('name'); ?></h1>
+              <p class="lead"><?php bloginfo('description') ; ?></p>
 
               <div id="price-timeline">
                 <div class="price active">
                   <h4>Pre-Launch Price <small>Ends soon!</small></h4>
-                  <span>$149</span>
+                  <span><?php echo $prelaunch_price; ?></span>
                 </div><!-- end price -->
                 <div class="price">
                   <h4>Launch Price <small>Coming soon!</small></h4>
-                  <span>$299</span>
+                  <span><?php echo $launch_price; ?></span>
                 </div><!-- end price -->
                 <div class="price">
                   <h4>Final Price <small>Coming soon!</small></h4>
-                  <span>$399</span>
+                  <span><?php echo $final_price; ?></span>
                 </div><!-- end price -->
               </div><!-- price-timeline -->
 
-              <p><a class="btn btn-lg btn-danger" href="/" role="button">Enroll now &raquo;</a></p>
+              <p><a class="btn btn-lg btn-danger" href="<?php echo $course_url ; ?>" role="button"><?php echo $button_text ; ?></a></p>
         </div><!-- col -->
 
       </div><!-- row -->
@@ -51,12 +60,12 @@ get_header(); ?>
   <div class="row">
 
     <div class="col-sm-8">
-      <p class="lead"><strong>Subscribe to our mailing list.</strong> We'll send something special as a thank you.</p>
+      <p class="lead"><?php echo $optin_text ; ?></p>
     </div><!-- end col -->
 
     <div class="col-sm-4">
       <button class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#myModal">
-        Click here to subscribe
+        <?php echo $optin_button_text ; ?>
       </button>
     </div><!-- end col -->
 
@@ -67,69 +76,81 @@ get_header(); ?>
 
 <!-- BOOST YOUR INCOME
 ================================================== -->
+
+<?php
+$income_feature_image	= get_field('income_feature_image');
+$income_section_title	= get_field('income_section_title');
+$income_section_desc	= get_field('income_section_description');
+$reason_1_title			  = get_field('reason_1_title');
+$reason_1_desc			  = get_field('reason_1_description');
+$reason_2_title		  	= get_field('reason_2_title');
+$reason_2_desc			  = get_field('reason_2_description');
+?>
+
 <section id="boost-income">
-<div class="container">
+	<div class="container">
 
-  <div class="section-header">
-    <img src="<?php bloginfo('stylesheet_directory'); ?>/assets/img/icon-boost.png" alt="Chart">
-    <h2>How You Can Boost Your Income</h2>
-  </div><!-- section-header -->
+		<div class="section-header">
 
-  <p class="lead">Whether you&rsquo;re a freelance designer, entrepreneur, employee for a company, code hobbyist, or looking for a new career &mdash; this course gives you an immensely valuable skill that will enable you to either:</p>
-  <div class="row">
-    <div class="col-sm-6">
-      <h3>Make money on the side</h3>
-      <p>So you can save up for that Hawaiian vacation you&rsquo;ve been wanting, help pay off your debt, your car, your mortgage, or simply just to have bonus cash laying around.</p>
-    </div><!-- end col -->
+			<!-- If user uploaded an image -->
+			<?php if( !empty($income_feature_image) ) : ?>
 
-    <div class="col-sm-6">
-      <h3>Create a full-time income</h3>
-      <p>WordPress developers have options. Many developers make a generous living off of creating custom WordPress themes and selling them on websites like ThemeForest. Freelance designers and developers can also take on WordPress projects and make an extra $1,000 - $5,000+ per month.</p>
-    </div><!-- end col -->
-  </div><!-- row -->
+			<img src="<?php echo $income_feature_image['url']; ?>" alt="<?php echo $income_feature_image['alt']; ?>">
 
-</div><!-- container -->
+			<?php endif; ?>
+
+			<h2><?php echo $income_section_title; ?></h2>
+		</div><!-- section-header -->
+
+		<p class="lead"><?php echo $income_section_desc; ?></p>
+		<div class="row">
+			<div class="col-sm-6">
+				<h3><?php echo $reason_1_title; ?></h3>
+				<p><?php echo $reason_1_desc; ?></p>
+			</div><!-- col -->
+			<div class="col-sm-6">
+				<h3><?php echo $reason_2_title; ?></h3>
+				<p><?php echo $reason_2_desc; ?></p>
+			</div><!-- col -->
+		</div><!-- row -->
+
+	</div><!-- container -->
 </section><!-- boost-income -->
 
+
+<?php
+$who_feature_image		= get_field('who_feature_image');
+$who_section_title		= get_field('who_section_title');
+$who_section_body		  = get_field('who_section_body');
+?>
 
 <!-- WHO BENEFITS
 ================================================== -->
 <section id="who-benefits">
-<div class="container">
+	<div class="container">
 
-  <div class="section-header">
-    <img src="<?php bloginfo('stylesheet_directory'); ?>/assets/img/icon-pad.png" alt="Pad and pencil">
-    <h2>Who Should Take This Course?</h2>
-  </div><!-- section-header -->
+		<div class="section-header">
 
-  <div class="row">
-    <div class="col-sm-8 col-sm-offset-2">
+			<!-- If user uploaded an image -->
+			<?php if( !empty($who_feature_image) ) : ?>
 
-      <h3>Graphic &amp; Web Designers</h3>
-      <p>Graphic designers are extremely talented, but ask them to code their designs and they'll freeze up! This leaves them with no other choice but to hire a web developer. Any professional graphic designers knows web developers can be expensive.</p>
-      <p>If you&rsquo;re a designer, learning to code your own WordPress websites can change your business entirely! Now, not only are you a great designer, but you're a skillful developer, too! This puts you in a position to <strong>make an extra $1,000 - $5,000 per project.</strong></p>
+			<img src="<?php echo $who_feature_image['url']; ?>" alt="<?php echo $who_feature_image['alt']; ?>">
 
-      <h3>Entrepreneurs</h3>
-      <p>Entrepreneurs have big dreams, and in many cases, shoestring budgets. In order to survive in the cut-throat world of the Startup company, it&rsquo;s a necessity to have a world-class website.  However, world-class websites come with a large price tag.</p>
-      <p>If you can learn how to build a high-quality startup website by yourself, then you&rsquo;ve just saved yourself a lot of cash, <strong>tens of thousands of dollars in many cases.</strong></p>
+			<?php endif; ?>
 
-      <h3>Employees</h3>
-      <p>Any company knows the education &amp; training of their employees is key to a thriving team.</p>
-      <p>Depending on the type of company you work for, if you understand how to code, and can develop CMS driven websites, that gives you <strong>negotiating power for a better position, or a higher salary.</strong></p>
+			<h2><?php echo $who_section_title; ?></h2>
+		</div><!-- section-header -->
 
-      <h3>Code Hobbyists</h3>
-      <p>It&rsquo;s fun to learn challenging new skills. Code hobbyists can add dynamic websites to their arsenal of tools to play with &mdash; you can even <strong>sell WordPress themes and plugins for cash!</strong> The possibilities are truly endless.</p>
+		<div class="row">
+			<div class="col-sm-8 col-sm-offset-2">
 
-      <h3>People Looking for a New Career</h3>
-      <p>Are you out of work? Looking for a more rewarding job? Desire a career that can allow you to work almost anywhere in the world? Becoming a Web Developer might be the answer for you.</p>
-      <p><strong>Web developers are paid well, anywhere from $33,000 to more than $105,000 per year.</strong> They get to work at amazing companies that are changing the world, or they enjoy the ability to start their own companies, become location-independent and work from home, from coffee shops, in an airplane, on the beach, or wherever they want!</p>
+				<?php echo $who_section_body; ?>
 
-    </div><!-- end col -->
-  </div><!-- row -->
+			</div><!-- col -->
+		</div><!-- row -->
 
-</div><!-- container -->
+	</div><!-- container -->
 </section><!-- who-benefits -->
-
 
 <!-- COURSE FEATURES
 ================================================== -->
