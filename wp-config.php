@@ -18,20 +18,10 @@
  * @package WordPress
  */
 
-// ** MySQL settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
+// ** MySQL settings ** //
 define('DB_NAME', 'benz');
-# define('DB_NAME', 'redsdesi_wordpress170');
-
-/** MySQL database username */
 define('DB_USER', 'root');
-# define('DB_USER', 'redsdesi_word170');
-
-/** MySQL database password */
 define('DB_PASSWORD', 'root');
-# define('DB_PASSWORD', 'c8Dh389%##dhjf0@!4h');
-
-/** MySQL hostname */
 define('DB_HOST', 'localhost');
 
 /** Database Charset to use in creating database tables. */
@@ -39,6 +29,10 @@ define('DB_CHARSET', 'utf8mb4');
 
 /** The Database Collate type. Don't change this if in doubt. */
 define('DB_COLLATE', '');
+
+// debugging error log display in browser
+define('WP_DEBUG', TRUE);
+define('WP_DEBUG_DISPLAY', TRUE);
 
 /**#@+
  * Authentication Unique Keys and Salts.
@@ -68,18 +62,6 @@ define('NONCE_SALT',       '`u+4Or2zddP`nLx8j=|=y%HXZ=`u!cw8Wyz20-mQ -PYDPR,Gyl`
  */
 $table_prefix  = 'wp_';
 
-/**
- * For developers: WordPress debugging mode.
- *
- * Change this to true to enable the display of notices during development.
- * It is strongly recommended that plugin and theme developers use WP_DEBUG
- * in their development environments.
- *
- * For information on other constants that can be used for debugging,
- * visit the Codex.
- *
- * @link https://codex.wordpress.org/Debugging_in_WordPress
- */
 
 /* That's all, stop editing! Happy blogging. */
 
@@ -90,6 +72,3 @@ if ( !defined('ABSPATH') )
 /** Sets up WordPress vars and included files. */
 require_once(ABSPATH . 'wp-settings.php');
 
-// debugging error log display in browser
-define('WP_DEBUG', FALSE);
-define('WP_DEBUG_DISPLAY', true);
