@@ -91,5 +91,5 @@ if ( !defined('ABSPATH') )
 require_once(ABSPATH . 'wp-settings.php');
 
 // debugging error log display in browser
-define('WP_DEBUG', true);
+define('WP_DEBUG', FALSE);
 define('WP_DEBUG_DISPLAY', true);
