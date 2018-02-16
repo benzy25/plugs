@@ -156,6 +156,11 @@ if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
 
+function new_excerpt_more($more) {
+    global $post;
+	return '... <a class="moretag" href="'. get_permalink($post->ID) . '"> continue reading &raquo;</a>';
+}
+add_filter('excerpt_more', 'new_excerpt_more');
 
 /*** var_dump_ array/string all cute and pretty  ***/
 function _pre($array) { echo '<pre>'; print_r ($array); echo '</pre>'; }
