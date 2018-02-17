@@ -39,7 +39,7 @@ get_header(); ?>
 
 			<?php endwhile; ?>
 
-			<?php bootstrap2wordpress_paging_nav(); ?>
+			<?php b2w_theme_paging_nav(); ?>
 
 			<?php else : ?>
 
